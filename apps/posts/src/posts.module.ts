@@ -13,7 +13,7 @@ import { PostsService } from './posts.service';
         MONGODB_URI: Joi.string().required(),
         PORT: Joi.number().required(),
       }),
-      envFilePath: './apps/orders/.env',
+      envFilePath: './apps/posts/.env',
     }),
     DatabaseModule,
   ],

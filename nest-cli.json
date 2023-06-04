@@ -37,15 +37,6 @@
         "tsConfigPath": "apps/auth/tsconfig.app.json"
       }
     },
-    "interact": {
-      "type": "application",
-      "root": "apps/interact",
-      "entryFile": "main",
-      "sourceRoot": "apps/interact/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/interact/tsconfig.app.json"
-      }
-    },
     "common": {
       "type": "library",
       "root": "libs/common",
