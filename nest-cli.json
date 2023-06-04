@@ -1,8 +1,59 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/posts/src",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/posts/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/posts",
+  "projects": {
+    "posts": {
+      "type": "application",
+      "root": "apps/posts",
+      "entryFile": "main",
+      "sourceRoot": "apps/posts/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/posts/tsconfig.app.json"
+      }
+    },
+    "feed": {
+      "type": "application",
+      "root": "apps/feed",
+      "entryFile": "main",
+      "sourceRoot": "apps/feed/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/feed/tsconfig.app.json"
+      }
+    },
+    "auth": {
+      "type": "application",
+      "root": "apps/auth",
+      "entryFile": "main",
+      "sourceRoot": "apps/auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/auth/tsconfig.app.json"
+      }
+    },
+    "interact": {
+      "type": "application",
+      "root": "apps/interact",
+      "entryFile": "main",
+      "sourceRoot": "apps/interact/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/interact/tsconfig.app.json"
+      }
+    },
+    "common": {
+      "type": "library",
+      "root": "libs/common",
+      "entryFile": "index",
+      "sourceRoot": "libs/common/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/common/tsconfig.lib.json"
+      }
+    }
   }
 }
