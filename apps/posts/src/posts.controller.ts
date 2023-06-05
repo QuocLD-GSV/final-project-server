@@ -16,9 +16,10 @@ export class PostsController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async createPost(@Payload() data: CreatePostDto, @Req() request: any) {
+    console.log(request.user);
     return this.postsService.createPost({
       ...data,
-      user_id: request.user.user_id,
+      user_id: request.user._id,
     });
   }
 }

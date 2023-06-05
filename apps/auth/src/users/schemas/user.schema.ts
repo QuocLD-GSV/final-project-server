@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from '@app/common';
+import { Types } from 'mongoose';
 
-@Schema()
+@Schema({ collection: 'user' })
 export class User extends AbstractDocument {
   @Prop()
   email: string;
@@ -17,6 +18,17 @@ export class User extends AbstractDocument {
 
   @Prop()
   avatar: string;
+
+  @Prop({ type: [String], enum: ['user', 'admin'], default: ['user'] })
+  roles: string[];
+
+  @Prop([
+    { refreshToken: String, createdAt: { type: Date, default: Date.now } },
+  ])
+  authenticate: {
+    refreshToken: string;
+    createdAt: Date;
+  }[];
 
   @Prop()
   bio: string;

@@ -15,6 +15,4 @@ export class CreateUserRequest {
   avatar: string;
 
   bio: string;
-
-  isDeleted: boolean;
 }
