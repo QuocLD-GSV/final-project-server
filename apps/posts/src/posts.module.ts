@@ -1,4 +1,4 @@
-import { DatabaseModule } from '@app/common';
+import { AuthModule, DatabaseModule, RmqModule } from '@app/common';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -20,6 +20,8 @@ import { PostsService } from './posts.service';
     }),
     DatabaseModule,
     MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
+    AuthModule,
+    RmqModule,
   ],
   controllers: [PostsController],
   providers: [PostsService, PostsRepository],
