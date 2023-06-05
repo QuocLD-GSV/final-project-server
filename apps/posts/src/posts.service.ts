@@ -10,10 +10,10 @@ export class PostsService {
     return this.postRepository.find({});
   }
 
-  async createPost(data: CreatePostDto) {
+  async createPost(data: any) {
     return this.postRepository.create({
       ...data,
-      user_id: '1',
+      user_id: data.user_id,
       isDeleted: false,
     });
   }
