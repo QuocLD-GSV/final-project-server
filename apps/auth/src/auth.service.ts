@@ -36,6 +36,10 @@ export class AuthService {
     const payload = await this.newRefreshAndAccessToken(user, values);
 
     //add refreshToken to User
+    await this.userService.addNewRefreshToken({
+      refreshToken: payload.refreshToken,
+      user_id: user._id,
+    });
 
     response.cookie('Authentication', payload.accessToken, {
       httpOnly: true,

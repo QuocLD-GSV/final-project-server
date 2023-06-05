@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 import { UsersRepository } from './users.repository';
 import { CreateUserRequest } from './dto/create-user.request';
 import { User } from './schemas/user.schema';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class UsersService {
@@ -23,6 +24,7 @@ export class UsersService {
       password: await bcrypt.hash(request.password, 10),
       roles: ['user'],
       isDeleted: false,
+      authenticate: [],
     });
     return user;
   }
@@ -49,7 +51,30 @@ export class UsersService {
     return user;
   }
 
-  async getUser(getUserArgs: Partial<User>) {
-    return this.usersRepository.findOne(getUserArgs);
+  async getUserById(id: Types.ObjectId) {
+    return this.usersRepository.findOne({ _id: id });
+  }
+
+  async addNewRefreshToken(values: {
+    refreshToken: string;
+    user_id: Types.ObjectId;
+  }) {
+    const { refreshToken, user_id } = values;
+    this.usersRepository.findOneAndUpdate(user_id, {
+      $addToSet: {
+        authenticate: { refreshToken },
+      },
+    });
+  }
+
+  async removeRefreshToken(values: {
+    refreshToken: string;
+    user_id: Types.ObjectId;
+  }) {
+    const user = await this.getUserById(values.user_id);
+    user.authenticate.filter((authObject) => {
+      authObject.refreshToken === values.refreshToken;
+    });
+    await user.save();
   }
 }
