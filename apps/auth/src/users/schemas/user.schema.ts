@@ -22,9 +22,12 @@ export class User extends AbstractDocument {
   @Prop({ type: [String], enum: ['user', 'admin'], default: ['user'] })
   roles: string[];
 
-  @Prop([{ refreshToken: String }])
+  @Prop([
+    { refreshToken: String, createdAt: { type: Date, default: Date.now } },
+  ])
   authenticate: {
     refreshToken: string;
+    createdAt: Date;
   }[];
 
   @Prop()

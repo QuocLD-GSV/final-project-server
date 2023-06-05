@@ -71,10 +71,9 @@ export class UsersService {
     refreshToken: string;
     user_id: Types.ObjectId;
   }) {
-    const user = await this.getUserById(values.user_id);
-    user.authenticate.filter((authObject) => {
-      authObject.refreshToken === values.refreshToken;
+    const { refreshToken, user_id } = values;
+    return this.usersRepository.findOneAndUpdate(user_id, {
+      $pull: { authenticate: { refreshToken } },
     });
-    await user.save();
   }
 }
