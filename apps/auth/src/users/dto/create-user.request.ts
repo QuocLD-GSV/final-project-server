@@ -14,7 +14,9 @@ export class CreateUserRequest {
 
   avatar: string;
 
-  bio: string;
+  authenticate: {
+    refreshToken: string;
+  }[];
 
-  isDeleted: boolean;
+  bio: string;
 }

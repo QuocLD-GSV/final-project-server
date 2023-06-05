@@ -4,7 +4,9 @@ export class CreatePostDto {
   @IsNotEmpty()
   content: string;
 
-  likeId: {}[];
+  likeId: {
+    user_id: string;
+  }[];
 
   media: {
     type: string;

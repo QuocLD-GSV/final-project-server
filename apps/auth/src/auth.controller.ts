@@ -1,4 +1,4 @@
-import { Controller, Post, Res, UseGuards } from '@nestjs/common';
+import { Controller, Ip, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
@@ -16,8 +16,13 @@ export class AuthController {
   async login(
     @CurrentUser() user: User,
     @Res({ passthrough: true }) response: Response,
+    @Ip() ipAddress: any,
+    @Req() request: any,
   ) {
-    await this.authService.login(user, response);
+    await this.authService.login(user, response, {
+      ipAddress: ipAddress,
+      userAgent: request.userAgent,
+    });
     response.send(user);
   }
 

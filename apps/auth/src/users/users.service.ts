@@ -12,11 +12,17 @@ import { User } from './schemas/user.schema';
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
+  async getAll() {
+    return this.usersRepository.find({});
+  }
+
   async createUser(request: CreateUserRequest) {
     await this.validateCreateUserRequest(request);
     const user = await this.usersRepository.create({
       ...request,
       password: await bcrypt.hash(request.password, 10),
+      roles: ['user'],
+      isDeleted: false,
     });
     return user;
   }
