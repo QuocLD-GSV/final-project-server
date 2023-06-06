@@ -1,6 +1,6 @@
 import { Controller, Ip, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './current-user.decorator';
 import JwtAuthGuard from './guards/jwt-auth.guard';
@@ -26,9 +26,30 @@ export class AuthController {
     response.send(user);
   }
 
+  @UseGuards(LocalAuthGuard)
+  @Post('logout')
+  async logout(
+    @CurrentUser() user: User,
+    @Res({ passthrough: true }) response: Response,
+    @Req() request: Request,
+  ) {
+    return this.authService.logout(response, {
+      refreshToken: request.cookies['RefreshToken'],
+      user_id: user._id,
+    });
+  }
+
   @UseGuards(JwtAuthGuard)
   @MessagePattern('validate_user')
   async validateUser(@CurrentUser() user: User) {
     return user;
+  }
+
+  @Post('refresh')
+  async refresh(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    return this.authService.refresh(request.cookies['RefreshToken'], response);
   }
 }

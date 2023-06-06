@@ -76,4 +76,15 @@ export class UsersService {
       $pull: { authenticate: { refreshToken } },
     });
   }
+
+  async verifiyRefreshTokenLoggedIn(values: {
+    refreshToken: string;
+    user_id: Types.ObjectId;
+  }): Promise<User | null> {
+    const { refreshToken, user_id } = values;
+    return await this.usersRepository.findOne({
+      'authenticate.refreshToken': refreshToken,
+      user_id: user_id,
+    });
+  }
 }
