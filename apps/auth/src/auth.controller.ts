@@ -23,7 +23,7 @@ export class AuthController {
       ipAddress: ipAddress,
       userAgent: request.userAgent,
     });
-    response.send(user);
+    response.send({ ...user, password: null, authenticate: null });
   }
 
   @UseGuards(LocalAuthGuard)
