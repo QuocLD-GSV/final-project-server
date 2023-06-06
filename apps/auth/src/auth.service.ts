@@ -106,16 +106,6 @@ export class AuthService {
       httpOnly: true,
       expires,
     });
-
-    response.cookie('RefreshToken', payload.refreshToken, {
-      httpOnly: true,
-      expires: expiresLogin,
-    });
-
-    response.cookie('Roles', payload.roles, {
-      httpOnly: true,
-      expires: expiresLogin,
-    });
   }
 
   private async retrieveRefreshToken(refreshStr: string): Promise<User | null> {
@@ -157,32 +147,6 @@ export class AuthService {
         this.configService.get('JWT_SECRET'),
         {
           expiresIn: '3600s',
-        },
-      ),
-      refreshToken: refreshObject.sign(),
-      roles: user.roles,
-    };
-  }
-
-  private async newRefreshAndAccessToken(
-    user: User,
-    values: { userAgent: string; ipAddress: string },
-  ): Promise<{ accessToken: string; refreshToken: string; roles: any }> {
-    const refreshObject = new RefreshToken({
-      user_id: user._id,
-      userAgent: values.userAgent,
-      ipAddress: values.ipAddress,
-      roles: user.roles,
-    });
-    return {
-      accessToken: sign(
-        {
-          userId: user._id,
-          roles: user.roles,
-        },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: '6000s',
         },
       ),
       refreshToken: refreshObject.sign(),
