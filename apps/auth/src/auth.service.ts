@@ -5,6 +5,7 @@ import RefreshToken from './entities/refresh-token.entity';
 import { User } from './users/schemas/user.schema';
 import { sign } from 'jsonwebtoken';
 import { UsersService } from './users/users.service';
+import { Types } from 'mongoose';
 
 export interface TokenPayload {
   userId: string;
@@ -57,8 +58,23 @@ export class AuthService {
     });
   }
 
-  logout(response: Response) {
+  async logout(
+    response: Response,
+    values: { refreshToken: string; user_id: Types.ObjectId },
+  ) {
+    await this.userService.removeRefreshToken(values);
+
     response.cookie('Authentication', '', {
+      httpOnly: true,
+      expires: new Date(),
+    });
+
+    response.cookie('RefreshToken', '', {
+      httpOnly: true,
+      expires: new Date(),
+    });
+
+    response.cookie('Roles', '', {
       httpOnly: true,
       expires: new Date(),
     });
