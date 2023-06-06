@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import RefreshToken from './entities/refresh-token.entity';
 import { User } from './users/schemas/user.schema';
-import { sign } from 'jsonwebtoken';
+import { sign, verify, decode } from 'jsonwebtoken';
 import { UsersService } from './users/users.service';
 import { Types } from 'mongoose';
 
@@ -80,6 +80,54 @@ export class AuthService {
     });
   }
 
+  async refresh(refreshToken: string, response: Response) {
+    const user = await this.retrieveRefreshToken(refreshToken);
+    if (!user) {
+      throw new HttpException('refreshToken invalid!', HttpStatus.UNAUTHORIZED);
+    }
+
+    const newAccessToken = sign(
+      {
+        userId: user._id,
+        roles: user.roles,
+      },
+      this.configService.get('JWT_SECRET'),
+      {
+        expiresIn: '3600s',
+      },
+    );
+
+    const expires = new Date();
+    expires.setSeconds(
+      expires.getSeconds() + this.configService.get('JWT_EXPIRATION'),
+    );
+
+    response.cookie('Authentication', newAccessToken, {
+      httpOnly: true,
+      expires,
+    });
+  }
+
+  private async retrieveRefreshToken(refreshStr: string): Promise<User | null> {
+    try {
+      const decoded = verify(
+        refreshStr,
+        this.configService.get('REFRESH_SECRET'),
+      );
+      if (typeof decoded === 'string') {
+        return undefined;
+      }
+      return Promise.resolve(
+        await this.userService.verifiyRefreshTokenLoggedIn({
+          refreshToken: refreshStr,
+          user_id: decoded.id,
+        }),
+      );
+    } catch (e) {
+      throw new HttpException('refreshToken invalid!', HttpStatus.UNAUTHORIZED);
+    }
+  }
+
   private async newRefreshAndAccessToken(
     user: User,
     values: { userAgent: string; ipAddress: string },
@@ -96,9 +144,9 @@ export class AuthService {
           userId: user._id,
           roles: user.roles,
         },
-        process.env.JWT_SECRET,
+        this.configService.get('JWT_SECRET'),
         {
-          expiresIn: '6000s',
+          expiresIn: '3600s',
         },
       ),
       refreshToken: refreshObject.sign(),

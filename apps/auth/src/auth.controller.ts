@@ -44,4 +44,12 @@ export class AuthController {
   async validateUser(@CurrentUser() user: User) {
     return user;
   }
+
+  @Post('refresh')
+  async refresh(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    return this.authService.refresh(request.cookies['RefreshToken'], response);
+  }
 }
