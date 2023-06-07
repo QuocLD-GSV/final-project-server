@@ -24,8 +24,9 @@ export class PostsController {
     });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  async like(@Payload() data: LikePostDto) {
-    return this.postsService.likePost();
+  async like(@Payload() data: LikePostDto, @Req() request: any) {
+    return this.postsService.likePost(data.post_id, request.user._id);
   }
 }
