@@ -1,6 +1,7 @@
 import { JwtAuthGuard } from '@app/common';
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { Payload } from '@nestjs/microservices';
+import { Types } from 'mongoose';
 import { CreatePostDto } from '../dto/create-new-post.dto';
 import { LikePostDto } from '../dto/like-post.dto';
 import { PostsService } from './posts.service';
@@ -25,8 +26,17 @@ export class PostsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post()
+  @Post('like')
   async like(@Payload() data: LikePostDto, @Req() request: any) {
-    return this.postsService.likePost(data.post_id, request.user._id);
+    return this.postsService.likePost(
+      new Types.ObjectId(data.post_id),
+      new Types.ObjectId(request.user._id),
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('comment')
+  async comment(@Payload() data: LikePostDto, @Req() request: any) {
+    return 'comment';
   }
 }
