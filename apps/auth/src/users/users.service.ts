@@ -13,6 +13,10 @@ import { Types } from 'mongoose';
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
+  async getAll() {
+    return this.usersRepository.find({});
+  }
+
   async createUser(request: CreateUserRequest) {
     await this.validateCreateUserRequest(request);
     const user = await this.usersRepository.create({
