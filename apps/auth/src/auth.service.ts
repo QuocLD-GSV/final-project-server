@@ -55,12 +55,14 @@ export class AuthService {
       httpOnly: true,
       expires: expiresLogin,
     });
+
+    return user;
   }
 
   async logout(
     response: Response,
     values: { refreshToken: string; user_id: Types.ObjectId },
-  ) {
+  ): Promise<void> {
     await this.userService.removeRefreshToken(values);
 
     response.cookie('Authentication', '', {

@@ -1,10 +1,11 @@
 import { Test } from '@nestjs/testing';
-import { User } from '../schemas/user.schema';
-import { UsersController } from '../users.controller';
-import { UsersService } from '../users.service';
+import { CreateUserRequest } from '../users/dto/create-user.request';
+import { User } from '../users/schemas/user.schema';
+import { UsersController } from '../users/users.controller';
+import { UsersService } from '../users/users.service';
 import { userStub } from './stubs/user.stub';
 
-jest.mock('../users.service');
+jest.mock('../users/users.service');
 
 describe('UsersController', () => {
   let usersController: UsersController;
@@ -41,6 +42,33 @@ describe('UsersController', () => {
 
       test('then its should return a user', () => {
         expect(user).toEqual(userStub());
+      });
+    });
+
+    describe('createUser', () => {
+      describe('when createUser Is called', () => {
+        let user: User;
+        let createUserDto: CreateUserRequest;
+
+        beforeEach(async () => {
+          createUserDto = {
+            email: userStub().email,
+            password: userStub().password,
+            googleId: userStub().password,
+            dateOfBirth: userStub().dateOfBirth,
+            avatar: userStub().avatar,
+            bio: userStub().bio,
+          };
+          user = await usersController.createUser(createUserDto);
+        });
+
+        test('then its should call usersService', () => {
+          expect(usersService.createUser).toHaveBeenCalledWith(createUserDto);
+        });
+
+        test('then it should return a user', () => {
+          expect(user).toEqual(userStub());
+        });
       });
     });
   });
