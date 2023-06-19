@@ -1,4 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Types } from 'mongoose';
+import JwtAuthGuard from '../guards/jwt-auth.guard';
 import { CreateUserRequest } from './dto/create-user.request';
 import { UsersService } from './users.service';
 
@@ -9,6 +11,12 @@ export class UsersController {
   @Post()
   async createUser(@Body() request: CreateUserRequest) {
     return this.usersService.createUser(request);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  getUserById(@Req() request: any) {
+    return this.usersService.getUserById(new Types.ObjectId(request.user._id));
   }
 
   @Get()
