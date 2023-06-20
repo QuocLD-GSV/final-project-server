@@ -32,7 +32,7 @@ export class PostsController {
   async createPost(
     @Payload() data: CreatePostDto,
     @Req() request: any,
-    @UploadedFiles() files: Express.Multer.File[],
+    @UploadedFiles() files?: Express.Multer.File[],
   ) {
     return this.postsService.createPost(
       data,
@@ -42,7 +42,7 @@ export class PostsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post()
+  @Post('like')
   async like(@Payload() data: LikePostDto, @Req() request: any) {
     return this.postsService.likePost(
       new Types.ObjectId(data.post_id),
