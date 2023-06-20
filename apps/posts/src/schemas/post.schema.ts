@@ -29,12 +29,14 @@ export class Post extends AbstractDocument {
         enum: ['image', 'video'],
       },
       url: String,
+      key: String,
     },
     { required: false },
   ])
   media: {
     type: string;
     url: string;
+    key: string;
   }[];
 
   @Prop({
