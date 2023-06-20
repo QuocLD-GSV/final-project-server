@@ -1,10 +1,21 @@
 import { JwtAuthGuard } from '@app/common';
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { Payload } from '@nestjs/microservices';
 import { Types } from 'mongoose';
 import { CreatePostDto } from './dto/create-new-post.dto';
 import { LikePostDto } from './dto/like-post.dto';
 import { PostsService } from './posts.service';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { filesUploadLimit } from './constants/constants';
 
 @Controller()
 export class PostsController {
@@ -16,13 +27,18 @@ export class PostsController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FilesInterceptor('files[]', filesUploadLimit))
   @Post()
-  async createPost(@Payload() data: CreatePostDto, @Req() request: any) {
-    console.log(request.user);
-    return this.postsService.createPost({
-      ...data,
-      user_id: request.user._id,
-    });
+  async createPost(
+    @Payload() data: CreatePostDto,
+    @Req() request: any,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    return this.postsService.createPost(
+      data,
+      new Types.ObjectId(request.user._id),
+      files,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
