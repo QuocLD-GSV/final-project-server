@@ -26,22 +26,27 @@ export class PostsService {
   async createPost(
     data: CreatePostDto,
     user_id: Types.ObjectId,
-    files: Express.Multer.File[],
+    files?: Express.Multer.File[],
   ) {
     const filesUploaded = [];
 
-    files.map(async (file) => {
-      const newFileUploaded = await this.uploadFileToAwsS3(
-        file.buffer,
-        file.originalname,
+    if (files) {
+      await Promise.all(
+        files.map(async (file) => {
+          const newFileUploaded = await this.uploadFileToAwsS3(
+            file.buffer,
+            file.originalname,
+          );
+          filesUploaded.push({ ...newFileUploaded, type: 'image' });
+        }),
       );
-      filesUploaded.push({ ...newFileUploaded, type: 'image' });
-    });
+    }
 
     return await this.postRepository.create({
       ...data,
       user_id: user_id,
-      media: filesUploaded,
+      media: [...filesUploaded],
+      type: 'image',
     });
   }
 
@@ -75,7 +80,7 @@ export class PostsService {
       { _id: post_id },
       {
         $addToSet: {
-          likeId: user_id,
+          likes: { user_id, unliked: true },
         },
       },
     );
