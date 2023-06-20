@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
-import { CreatePostDto } from '../dto/create-new-post.dto';
-import { PostsRepository } from './posts.repository';
+import { InjectHTTPExceptions } from './decorators/try-catch';
+import { CreatePostDto } from './dto/create-new-post.dto';
+import { PostErrors } from './errors/posts.errors';
+import { PostsRepository } from './repository/posts.repository';
 
 @Injectable()
 export class PostsService {
@@ -11,6 +13,10 @@ export class PostsService {
     return this.postRepository.find({});
   }
 
+  @InjectHTTPExceptions(
+    PostErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
   async createPost(data: any) {
     return this.postRepository.create({
       ...data,
@@ -19,6 +25,10 @@ export class PostsService {
     });
   }
 
+  @InjectHTTPExceptions(
+    PostErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
   async likePost(post_id: Types.ObjectId, user_id: Types.ObjectId) {
     return this.postRepository.findOneAndUpdate(
       { _id: post_id },
