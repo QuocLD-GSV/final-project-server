@@ -3,9 +3,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
-import { Post, PostSchema } from '../schemas/post.schema';
+import { Post, PostSchema } from './schemas/post.schema';
 import { PostsController } from './posts.controller';
-import { PostsRepository } from './posts.repository';
+import { PostsRepository } from './repository/posts.repository';
 import { PostsService } from './posts.service';
 
 @Module({

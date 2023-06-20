@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from '@app/common';
+import { Schema as MongooseShema } from 'mongoose';
 
 @Schema({ timestamps: true, collection: 'posts' })
 export class Post extends AbstractDocument {
@@ -10,7 +11,16 @@ export class Post extends AbstractDocument {
   content: string;
 
   @Prop({ required: false })
-  likeId: {}[];
+  likeId: string[];
+
+  @Prop([
+    {
+      type: MongooseShema.Types.ObjectId,
+      ref: 'Comment',
+      required: false,
+    },
+  ])
+  comments: Comment[];
 
   @Prop([
     {
