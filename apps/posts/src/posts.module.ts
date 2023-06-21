@@ -3,10 +3,14 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
-import { Post, PostSchema } from '../schemas/post.schema';
+import { Post, PostSchema } from './schemas/post.schema';
 import { PostsController } from './posts.controller';
-import { PostsRepository } from './posts.repository';
+import { PostsRepository } from './repository/posts.repository';
 import { PostsService } from './posts.service';
+import { LikesRepository } from './repository/likes.repository';
+import { Like, LikeSchema } from './schemas/like.schema';
+import { Comment, CommentSchema } from './schemas/comment.schema';
+import { User, UserSchema } from './schemas/user.schema';
 
 @Module({
   imports: [
@@ -19,11 +23,16 @@ import { PostsService } from './posts.service';
       envFilePath: './apps/posts/.env',
     }),
     DatabaseModule,
-    MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
+    MongooseModule.forFeature([
+      { name: Post.name, schema: PostSchema },
+      { name: Like.name, schema: LikeSchema },
+      { name: Comment.name, schema: CommentSchema },
+      { name: User.name, schema: UserSchema },
+    ]),
     AuthModule,
     RmqModule,
   ],
   controllers: [PostsController],
-  providers: [PostsService, PostsRepository],
+  providers: [PostsService, LikesRepository, PostsRepository],
 })
 export class PostsModule {}
