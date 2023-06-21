@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { S3 } from 'aws-sdk';
 import { Types } from 'mongoose';
 import { HTTPExceptions } from './decorators/try-catch';
-import { CreateCommentToPostDto } from './dto/comment-post.dto';
 import { CreatePostDto } from './dto/create-new-post.dto';
 import { PostErrors } from './errors/posts.errors';
 import { LikesRepository } from './repository/likes.repository';

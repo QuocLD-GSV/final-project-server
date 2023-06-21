@@ -9,8 +9,9 @@ import { PostsRepository } from './repository/posts.repository';
 import { PostsService } from './posts.service';
 import { LikesRepository } from './repository/likes.repository';
 import { Like, LikeSchema } from './schemas/like.schema';
-import { Comment, CommentSchema } from './schemas/comment.schema';
+import { Comment, CommentSchema } from './comments/schemas/comment.schema';
 import { User, UserSchema } from './schemas/user.schema';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { User, UserSchema } from './schemas/user.schema';
     ]),
     AuthModule,
     RmqModule,
+    CommentsModule,
   ],
   controllers: [PostsController],
   providers: [PostsService, LikesRepository, PostsRepository],
