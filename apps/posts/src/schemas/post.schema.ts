@@ -58,6 +58,9 @@ export class Post extends AbstractDocument {
     latitude: number;
     longitude: number;
   };
+
+  @Prop({ type: Boolean, default: false })
+  published: boolean;
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);
