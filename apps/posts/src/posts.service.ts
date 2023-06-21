@@ -2,7 +2,8 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { S3 } from 'aws-sdk';
 import { Types } from 'mongoose';
-import { InjectHTTPExceptions } from './decorators/try-catch';
+import { HTTPExceptions } from './decorators/try-catch';
+import { CreateCommentToPostDto } from './dto/comment-post.dto';
 import { CreatePostDto } from './dto/create-new-post.dto';
 import { PostErrors } from './errors/posts.errors';
 import { LikesRepository } from './repository/likes.repository';
@@ -21,7 +22,7 @@ export class PostsService {
     return this.postRepository.find({});
   }
 
-  @InjectHTTPExceptions(
+  @HTTPExceptions(
     PostErrors.INTERNAL_SERVER_ERROR,
     HttpStatus.INTERNAL_SERVER_ERROR,
   )
@@ -52,7 +53,7 @@ export class PostsService {
     });
   }
 
-  @InjectHTTPExceptions(
+  @HTTPExceptions(
     PostErrors.INTERNAL_SERVER_ERROR,
     HttpStatus.INTERNAL_SERVER_ERROR,
   )
@@ -73,7 +74,7 @@ export class PostsService {
     return { key: uploadResult.Key, url: uploadResult.Location };
   }
 
-  @InjectHTTPExceptions(
+  @HTTPExceptions(
     PostErrors.INTERNAL_SERVER_ERROR,
     HttpStatus.INTERNAL_SERVER_ERROR,
   )
