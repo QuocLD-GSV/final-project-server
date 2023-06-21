@@ -1,22 +1,25 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from '@app/common';
 import { Schema as MongooseShema } from 'mongoose';
+import { Like } from './like.schema';
 import { User } from './user.schema';
 
 @Schema({ timestamps: true, collection: 'posts' })
 export class Post extends AbstractDocument {
-  @Prop({ type: String, required: true })
-  user_id: string;
+  @Prop({ type: String, required: true, ref: 'User' })
+  user_id: User;
 
   @Prop({ type: String, required: true })
   content: string;
 
-  @Prop({
-    required: false,
-    type: { isDeleted: Boolean, user_id: MongooseShema.Types.ObjectId },
-    ref: 'user',
-  })
-  likes: { unliked: boolean; user_id: User }[];
+  @Prop([
+    {
+      type: MongooseShema.Types.ObjectId,
+      ref: 'Like',
+      required: false,
+    },
+  ])
+  likes: Like[];
 
   @Prop([
     {
