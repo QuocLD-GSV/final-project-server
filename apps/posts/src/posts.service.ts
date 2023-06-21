@@ -5,6 +5,7 @@ import { Types } from 'mongoose';
 import { InjectHTTPExceptions } from './decorators/try-catch';
 import { CreatePostDto } from './dto/create-new-post.dto';
 import { PostErrors } from './errors/posts.errors';
+import { LikesRepository } from './repository/likes.repository';
 import { PostsRepository } from './repository/posts.repository';
 import { generateAwsKey } from './utils/awsKey.utils';
 
@@ -13,6 +14,7 @@ export class PostsService {
   constructor(
     private postRepository: PostsRepository,
     private configService: ConfigService,
+    private likeRepository: LikesRepository,
   ) {}
 
   getAll() {
@@ -76,13 +78,37 @@ export class PostsService {
     HttpStatus.INTERNAL_SERVER_ERROR,
   )
   async likePost(post_id: Types.ObjectId, user_id: Types.ObjectId) {
-    return this.postRepository.findOneAndUpdate(
-      { _id: post_id },
-      {
-        $addToSet: {
-          likes: { user_id, unliked: true },
+    const exitLike = await this.likeRepository.findOne({
+      author_id: user_id,
+      post_id: post_id,
+    });
+
+    if (exitLike) {
+      await this.likeRepository.findOneAndUpdate(
+        { _id: exitLike._id },
+        { unliked: !exitLike.unliked },
+      );
+    } else {
+      const like = await this.likeRepository.create({
+        author_id: user_id,
+        post_id: post_id,
+        unlike: false,
+      });
+
+      await this.postRepository.findOneAndUpdate(
+        { _id: post_id },
+        {
+          $addToSet: {
+            likes: like._id,
+          },
         },
-      },
-    );
+      );
+    }
+
+    const returnLikes = await this.likeRepository.find({
+      post_id: post_id,
+    });
+
+    return returnLikes;
   }
 }
