@@ -11,7 +11,6 @@ import { CommentsRepository } from './repositorys/comments.repository';
 export class CommentsService {
   constructor(
     private commentsRepository: CommentsRepository,
-    private likesRepository: LikesRepository,
     private postRepository: PostsRepository,
   ) {}
 
