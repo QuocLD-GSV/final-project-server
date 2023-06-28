@@ -22,4 +22,12 @@ export class CommentsRepository extends AbstractRepository<Comment> {
       select: ['email', '_id'],
     });
   }
+
+  async returnAllCommentOfPost(post_id: Types.ObjectId) {
+    return await this.model.find({ postId: post_id }).populate({
+      path: 'replies',
+      model: 'Comment',
+      select: ['author_id', 'content', 'like_id', 'createdAt'],
+    });
+  }
 }
