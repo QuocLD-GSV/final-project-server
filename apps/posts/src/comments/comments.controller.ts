@@ -1,7 +1,16 @@
 import { JwtAuthGuard } from '@app/common';
-import { Controller, Post, UseGuards, Req, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseGuards,
+  Req,
+  Get,
+  Param,
+  Put,
+} from '@nestjs/common';
 import { Payload } from '@nestjs/microservices';
 import {
+  ApiBody,
   ApiCreatedResponse,
   ApiOperation,
   ApiUnauthorizedResponse,
@@ -28,6 +37,7 @@ export class CommentsController {
   @ApiOperation({ description: 'Create new comment to post' })
   @ApiCreatedResponse({ description: 'Return new Comment' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiBody({ type: CreateCommentToPostDto })
   @UseGuards(JwtAuthGuard)
   @Post()
   createCommentToPost(
@@ -56,7 +66,7 @@ export class CommentsController {
   @ApiCreatedResponse({ description: 'return new like' })
   @ApiUnauthorizedResponse({ description: 'unauthorized' })
   @UseGuards(JwtAuthGuard)
-  @Post('like')
+  @Put('like')
   likeComment(@Payload() data: LikeCommentDto, @Req() request: any) {
     return this.commentsService.likeComment(
       data,

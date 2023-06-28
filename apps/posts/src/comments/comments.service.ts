@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
-import { HTTPExceptions } from '../../../../libs/common/src/decorators/try-catch';
+import { InjectionHTTPExceptions } from '../../../../libs/common/src/decorators/try-catch';
 import { LikesRepository } from '../repository/likes.repository';
 import { PostsRepository } from '../repository/posts.repository';
 import { CreateCommentToPostDto } from './dto/comment-post.dto';
@@ -17,7 +17,7 @@ export class CommentsService {
     private likesRepository: LikesRepository,
   ) {}
 
-  @HTTPExceptions(
+  @InjectionHTTPExceptions(
     CommentErrors.INTERNAL_SERVER_ERROR,
     HttpStatus.INTERNAL_SERVER_ERROR,
   )
@@ -46,7 +46,7 @@ export class CommentsService {
     return returnComment;
   }
 
-  @HTTPExceptions(
+  @InjectionHTTPExceptions(
     CommentErrors.INTERNAL_SERVER_ERROR,
     HttpStatus.INTERNAL_SERVER_ERROR,
   )
@@ -75,7 +75,7 @@ export class CommentsService {
     return returnComment;
   }
 
-  @HTTPExceptions(
+  @InjectionHTTPExceptions(
     CommentErrors.INTERNAL_SERVER_ERROR,
     HttpStatus.INTERNAL_SERVER_ERROR,
   )
@@ -83,7 +83,7 @@ export class CommentsService {
     return await this.commentsRepository.returnAllCommentOfPost(postId);
   }
 
-  @HTTPExceptions(
+  @InjectionHTTPExceptions(
     CommentErrors.INTERNAL_SERVER_ERROR,
     HttpStatus.INTERNAL_SERVER_ERROR,
   )

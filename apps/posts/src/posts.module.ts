@@ -12,6 +12,7 @@ import { Like, LikeSchema } from './schemas/like.schema';
 import { Comment, CommentSchema } from './comments/schemas/comment.schema';
 import { User, UserSchema } from './schemas/user.schema';
 import { CommentsModule } from './comments/comments.module';
+import { CommentsRepository } from './comments/repositorys/comments.repository';
 
 @Module({
   imports: [
@@ -35,6 +36,11 @@ import { CommentsModule } from './comments/comments.module';
     CommentsModule,
   ],
   controllers: [PostsController],
-  providers: [PostsService, LikesRepository, PostsRepository],
+  providers: [
+    PostsService,
+    LikesRepository,
+    PostsRepository,
+    CommentsRepository,
+  ],
 })
 export class PostsModule {}
