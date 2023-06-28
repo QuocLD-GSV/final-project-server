@@ -10,6 +10,7 @@ import { Types } from 'mongoose';
 import { CommentsService } from './comments.service';
 import { CreateCommentToPostDto } from './dto/comment-post.dto';
 import { CreateCommentReplyDto } from './dto/comment-reply.dto';
+import { LikeCommentDto } from './dto/like-comment.dto';
 
 @Controller('comments')
 export class CommentsController {
@@ -46,6 +47,18 @@ export class CommentsController {
   @Post('reply')
   commentReply(@Payload() data: CreateCommentReplyDto, @Req() request: any) {
     return this.commentsService.createCommentReply(
+      data,
+      new Types.ObjectId(request.user._id),
+    );
+  }
+
+  @ApiOperation({ description: 'like or unlike a comment' })
+  @ApiCreatedResponse({ description: 'return new like' })
+  @ApiUnauthorizedResponse({ description: 'unauthorized' })
+  @UseGuards(JwtAuthGuard)
+  @Post('like')
+  likeComment(@Payload() data: LikeCommentDto, @Req() request: any) {
+    return this.commentsService.likeComment(
       data,
       new Types.ObjectId(request.user._id),
     );

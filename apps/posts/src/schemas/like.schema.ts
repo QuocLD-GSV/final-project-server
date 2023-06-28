@@ -9,7 +9,7 @@ export class Like extends AbstractDocument {
   @Prop({ type: MongooseShema.Types.ObjectId, ref: 'User', required: true })
   author_id: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String })
   post_id: string;
 
   @Prop({ type: Boolean, default: false })
@@ -20,6 +20,9 @@ export class Like extends AbstractDocument {
 
   @Prop({ type: Date, default: now })
   updatedAt: Date;
+
+  @Prop({ type: String, required: false })
+  comment_id: string;
 }
 
 export const LikeSchema = SchemaFactory.createForClass(Like);
