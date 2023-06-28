@@ -1,6 +1,5 @@
 import { JwtAuthGuard } from '@app/common';
 import {
-  Body,
   Controller,
   Get,
   Post,
@@ -16,6 +15,7 @@ import { LikePostDto } from './dto/like-post.dto';
 import { PostsService } from './posts.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { filesUploadLimit } from './constants/constants';
+import { ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
 
 @Controller()
 export class PostsController {
@@ -26,6 +26,8 @@ export class PostsController {
     return this.postsService.getAll();
   }
 
+  @ApiOperation({ description: 'Create new post' })
+  @ApiCreatedResponse({ description: 'Return new post' })
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FilesInterceptor('files[]', filesUploadLimit))
   @Post()
@@ -41,6 +43,7 @@ export class PostsController {
     );
   }
 
+  @ApiOperation({ description: 'Like or unlike to a post' })
   @UseGuards(JwtAuthGuard)
   @Post('like')
   async like(@Payload() data: LikePostDto, @Req() request: any) {
