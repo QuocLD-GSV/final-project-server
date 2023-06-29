@@ -6,7 +6,7 @@ import {
   Req,
   Get,
   Param,
-  Put,
+  Patch,
 } from '@nestjs/common';
 import { Payload } from '@nestjs/microservices';
 import {
@@ -66,7 +66,7 @@ export class CommentsController {
   @ApiCreatedResponse({ description: 'return new like' })
   @ApiUnauthorizedResponse({ description: 'unauthorized' })
   @UseGuards(JwtAuthGuard)
-  @Put('like')
+  @Patch('like')
   likeComment(@Payload() data: LikeCommentDto, @Req() request: any) {
     return this.commentsService.likeComment(
       data,

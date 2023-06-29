@@ -1,14 +1,11 @@
 import { JwtAuthGuard } from '@app/common';
 import {
   Controller,
-  Delete,
-  ForbiddenException,
   Get,
   HttpException,
   HttpStatus,
   Patch,
   Post,
-  Put,
   Req,
   UploadedFiles,
   UseGuards,
@@ -22,10 +19,9 @@ import { PostsService } from './posts.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { filesUploadLimit } from './constants/constants';
 import { ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
-import { RolesGuard } from '@app/common/guards/roles.guard';
-import { Roles } from '@app/common/decorators/roles.decorator';
 import { DeletePostDto } from './dto/delete-post-dto';
 import { PostErrors } from './errors/posts.errors';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @Controller()
 export class PostsController {
@@ -67,7 +63,7 @@ export class PostsController {
     description: 'Delete a Post, availble for only post owner or admin',
   })
   @UseGuards(JwtAuthGuard)
-  @Patch()
+  @Patch('delete')
   async postDelete(@Payload() data: DeletePostDto, @Req() request: any) {
     if (!request.user.roles.includes('admin')) {
       const post = await this.postsService.getPostById(
@@ -85,5 +81,27 @@ export class PostsController {
     return await this.postsService.deletePostById(
       new Types.ObjectId(data.post_id),
     );
+  }
+
+  @ApiOperation({
+    description: 'Update post, avaible for admin and post owner',
+  })
+  @UseGuards(JwtAuthGuard)
+  @Patch('update')
+  async updatePost(@Payload() data: UpdatePostDto, @Req() request: any) {
+    if (!request.user.roles.includes('admin')) {
+      const post = await this.postsService.getPostById(
+        new Types.ObjectId(data.post_id),
+      );
+
+      if (post.user_id !== request.user._id) {
+        throw new HttpException(
+          PostErrors.ONLY_PERMITTION_OWNER,
+          HttpStatus.FORBIDDEN,
+        );
+      }
+    }
+
+    return await this.postsService.updatePost(data);
   }
 }

@@ -61,6 +61,9 @@ export class Post extends AbstractDocument {
 
   @Prop({ type: Boolean, default: false })
   published: boolean;
+
+  @Prop({ type: [MongooseShema.Types.ObjectId], ref: 'User' })
+  users_tag: User[];
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);
