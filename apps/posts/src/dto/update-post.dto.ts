@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
-export class CreatePostDto {
-  @ApiProperty({
-    description: 'content of new post',
-    example: 'New Post Content',
-  })
+export class UpdatePostDto {
+  @ApiProperty()
   @IsNotEmpty()
+  post_id: string;
+
+  @ApiProperty()
   content: string;
 
   @ApiProperty()
@@ -15,6 +15,9 @@ export class CreatePostDto {
     longitude: number;
   };
 
-  @ApiProperty({ description: 'list of id user tag' })
+  @ApiProperty()
+  published: boolean;
+
+  @ApiProperty()
   users_tag: string[];
 }

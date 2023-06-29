@@ -73,4 +73,15 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     session.startTransaction();
     return session;
   }
+
+  async findManyAndUpdate(
+    filterQuery: FilterQuery<TDocument>,
+    update: UpdateQuery<TDocument>,
+  ) {
+    const documents = await this.model.updateMany(filterQuery, update, {
+      lean: true,
+      new: true,
+    });
+    return documents;
+  }
 }

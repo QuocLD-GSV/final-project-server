@@ -2,8 +2,10 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { S3 } from 'aws-sdk';
 import { Types } from 'mongoose';
-import { HTTPExceptions } from '../../../libs/common/src/decorators/try-catch';
+import { InjectionHTTPExceptions } from '../../../libs/common/src/decorators/try-catch';
+import { CommentsRepository } from './comments/repositorys/comments.repository';
 import { CreatePostDto } from './dto/create-new-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
 import { PostErrors } from './errors/posts.errors';
 import { LikesRepository } from './repository/likes.repository';
 import { PostsRepository } from './repository/posts.repository';
@@ -15,16 +17,13 @@ export class PostsService {
     private postRepository: PostsRepository,
     private configService: ConfigService,
     private likeRepository: LikesRepository,
+    private commentsRepository: CommentsRepository,
   ) {}
 
   getAll() {
     return this.postRepository.find({});
   }
 
-  @HTTPExceptions(
-    PostErrors.INTERNAL_SERVER_ERROR,
-    HttpStatus.INTERNAL_SERVER_ERROR,
-  )
   async createPost(
     data: CreatePostDto,
     user_id: Types.ObjectId,
@@ -44,6 +43,8 @@ export class PostsService {
       );
     }
 
+    for (let i = 0; i < data.users_tag.length; i++) {}
+
     return await this.postRepository.create({
       ...data,
       user_id: user_id,
@@ -52,7 +53,7 @@ export class PostsService {
     });
   }
 
-  @HTTPExceptions(
+  @InjectionHTTPExceptions(
     PostErrors.INTERNAL_SERVER_ERROR,
     HttpStatus.INTERNAL_SERVER_ERROR,
   )
@@ -73,7 +74,7 @@ export class PostsService {
     return { key: uploadResult.Key, url: uploadResult.Location };
   }
 
-  @HTTPExceptions(
+  @InjectionHTTPExceptions(
     PostErrors.INTERNAL_SERVER_ERROR,
     HttpStatus.INTERNAL_SERVER_ERROR,
   )
@@ -110,5 +111,56 @@ export class PostsService {
     });
 
     return returnLikes;
+  }
+
+  @InjectionHTTPExceptions(
+    PostErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
+  async getPostById(post_id: Types.ObjectId) {
+    return await this.postRepository.findOne({ _id: post_id });
+  }
+
+  @InjectionHTTPExceptions(
+    PostErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
+  async deletePostById(post_id: Types.ObjectId) {
+    await this.likeRepository.findManyAndUpdate(
+      {
+        post_id: post_id,
+      },
+      {
+        isDeleted: true,
+      },
+    );
+
+    await this.commentsRepository.findManyAndUpdate(
+      {
+        postId: post_id,
+      },
+      {
+        isDeleted: true,
+      },
+    );
+
+    return this.postRepository.findOneAndUpdate(
+      {
+        _id: post_id,
+      },
+      {
+        isDeleted: true,
+      },
+    );
+  }
+
+  async updatePost(data: UpdatePostDto) {
+    const { post_id, ...dataUpdate } = data;
+    console.log(dataUpdate);
+
+    return this.postRepository.findOneAndUpdate(
+      { _id: new Types.ObjectId(data.post_id) },
+      { ...dataUpdate },
+    );
   }
 }
