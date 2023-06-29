@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-export const HTTPExceptions = (
+export const InjectionHTTPExceptions = (
   message: string,
   code: HttpStatus | undefined = undefined,
 ) => {
