@@ -21,6 +21,7 @@ import { Types } from 'mongoose';
 import { CommentsService } from './comments.service';
 import { CreateCommentToPostDto } from './dto/comment-post.dto';
 import { CreateCommentReplyDto } from './dto/comment-reply.dto';
+import { DeleteCommentDto } from './dto/delete-comment.dto';
 import { LikeCommentDto } from './dto/like-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { CommentErrors } from './errors/comments.errors';
@@ -100,5 +101,37 @@ export class CommentsController {
     }
 
     return this.commentsService.updateComment(data);
+  }
+
+  @ApiOperation({
+    description:
+      'delete a comment, availble for comment owner, post owner and admin',
+  })
+  @ApiUnauthorizedResponse({ description: 'unauthorized' })
+  @UseGuards(JwtAuthGuard)
+  @Patch('delete')
+  async deleteComment(@Payload() data: DeleteCommentDto, @Req() request: any) {
+    if (!request.user.roles.includes('admin')) {
+      const comment = await this.commentsService.getCommentById(
+        new Types.ObjectId(data.comment_id),
+      );
+
+      const postCommnentLocatedIn =
+        await this.commentsService.getPostByCommentId(
+          new Types.ObjectId(data.comment_id),
+        );
+
+      if (
+        String(comment.author_id) !== request.user._id &&
+        String(postCommnentLocatedIn.user_id) !== request.user._id
+      ) {
+        throw new HttpException(
+          CommentErrors.ONLY_PERMITTION_OWNER,
+          HttpStatus.FORBIDDEN,
+        );
+      }
+    }
+
+    return this.commentsService.deleteComment(data);
   }
 }
