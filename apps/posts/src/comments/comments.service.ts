@@ -6,6 +6,7 @@ import { PostsRepository } from '../repository/posts.repository';
 import { CreateCommentToPostDto } from './dto/comment-post.dto';
 import { CreateCommentReplyDto } from './dto/comment-reply.dto';
 import { LikeCommentDto } from './dto/like-comment.dto';
+import { UpdateCommentDto } from './dto/update-comment.dto';
 import { CommentErrors } from './errors/comments.errors';
 import { CommentsRepository } from './repositorys/comments.repository';
 
@@ -120,5 +121,19 @@ export class CommentsService {
     });
 
     return returnLikes;
+  }
+
+  async getCommentById(comment_id: Types.ObjectId) {
+    return await this.commentsRepository.findOne({ _id: comment_id });
+  }
+
+  async updateComment(data: UpdateCommentDto) {
+    const { comment_id, ...dataToUpdate } = data;
+    return this.commentsRepository.findOneAndUpdate(
+      {
+        _id: new Types.ObjectId(data.comment_id),
+      },
+      { ...dataToUpdate },
+    );
   }
 }

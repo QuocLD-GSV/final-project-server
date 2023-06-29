@@ -7,6 +7,8 @@ import {
   Get,
   Param,
   Patch,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { Payload } from '@nestjs/microservices';
 import {
@@ -20,6 +22,8 @@ import { CommentsService } from './comments.service';
 import { CreateCommentToPostDto } from './dto/comment-post.dto';
 import { CreateCommentReplyDto } from './dto/comment-reply.dto';
 import { LikeCommentDto } from './dto/like-comment.dto';
+import { UpdateCommentDto } from './dto/update-comment.dto';
+import { CommentErrors } from './errors/comments.errors';
 
 @Controller('comments')
 export class CommentsController {
@@ -72,5 +76,29 @@ export class CommentsController {
       data,
       new Types.ObjectId(request.user._id),
     );
+  }
+
+  @ApiOperation({
+    description: 'update comment, availble for admin and comment owner',
+  })
+  @ApiCreatedResponse({ description: 'return new like' })
+  @ApiUnauthorizedResponse({ description: 'unauthorized' })
+  @UseGuards(JwtAuthGuard)
+  @Patch('update')
+  async updateComment(@Payload() data: UpdateCommentDto, @Req() request: any) {
+    if (!request.user.roles.includes('admin')) {
+      const comment = await this.commentsService.getCommentById(
+        new Types.ObjectId(data.comment_id),
+      );
+
+      if (String(comment.author_id) !== request.user._id) {
+        throw new HttpException(
+          CommentErrors.ONLY_PERMITTION_OWNER,
+          HttpStatus.FORBIDDEN,
+        );
+      }
+    }
+
+    return this.commentsService.updateComment(data);
   }
 }
