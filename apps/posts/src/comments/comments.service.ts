@@ -5,6 +5,7 @@ import { LikesRepository } from '../repository/likes.repository';
 import { PostsRepository } from '../repository/posts.repository';
 import { CreateCommentToPostDto } from './dto/comment-post.dto';
 import { CreateCommentReplyDto } from './dto/comment-reply.dto';
+import { DeleteCommentDto } from './dto/delete-comment.dto';
 import { LikeCommentDto } from './dto/like-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { CommentErrors } from './errors/comments.errors';
@@ -123,10 +124,18 @@ export class CommentsService {
     return returnLikes;
   }
 
+  @InjectionHTTPExceptions(
+    CommentErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
   async getCommentById(comment_id: Types.ObjectId) {
     return await this.commentsRepository.findOne({ _id: comment_id });
   }
 
+  @InjectionHTTPExceptions(
+    CommentErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
   async updateComment(data: UpdateCommentDto) {
     const { comment_id, ...dataToUpdate } = data;
     return this.commentsRepository.findOneAndUpdate(
@@ -134,6 +143,21 @@ export class CommentsService {
         _id: new Types.ObjectId(data.comment_id),
       },
       { ...dataToUpdate },
+    );
+  }
+
+  @InjectionHTTPExceptions(
+    CommentErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
+  async deleteComment(data: DeleteCommentDto) {
+    return this.commentsRepository.findOneAndUpdate(
+      {
+        _id: new Types.ObjectId(data.comment_id),
+      },
+      {
+        isDeleted: true,
+      },
     );
   }
 }
