@@ -104,7 +104,8 @@ export class CommentsController {
   }
 
   @ApiOperation({
-    description: 'delete a comment, availble for comment owner and admin',
+    description:
+      'delete a comment, availble for comment owner, post owner and admin',
   })
   @ApiUnauthorizedResponse({ description: 'unauthorized' })
   @UseGuards(JwtAuthGuard)
@@ -115,7 +116,15 @@ export class CommentsController {
         new Types.ObjectId(data.comment_id),
       );
 
-      if (String(comment.author_id) !== request.user._id) {
+      const postCommnentLocatedIn =
+        await this.commentsService.getPostByCommentId(
+          new Types.ObjectId(data.comment_id),
+        );
+
+      if (
+        String(comment.author_id) !== request.user._id &&
+        String(postCommnentLocatedIn.user_id) !== request.user._id
+      ) {
         throw new HttpException(
           CommentErrors.ONLY_PERMITTION_OWNER,
           HttpStatus.FORBIDDEN,

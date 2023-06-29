@@ -136,6 +136,16 @@ export class CommentsService {
     CommentErrors.INTERNAL_SERVER_ERROR,
     HttpStatus.INTERNAL_SERVER_ERROR,
   )
+  async getPostByCommentId(comment_id: Types.ObjectId) {
+    const comment = await this.commentsRepository.findOne({ _id: comment_id });
+
+    return await this.postsRepository.findOne({ _id: comment.postId });
+  }
+
+  @InjectionHTTPExceptions(
+    CommentErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
   async updateComment(data: UpdateCommentDto) {
     const { comment_id, ...dataToUpdate } = data;
     return this.commentsRepository.findOneAndUpdate(
