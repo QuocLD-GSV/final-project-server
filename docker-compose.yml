@@ -18,6 +18,25 @@ services:
       - /usr/src/app/node_modules
     ports:
       - '3000:3000'
+  feed:
+    build:
+      context: .
+      dockerfile: ./apps/feed/Dockerfile
+      target: development
+    command: npm run start:dev feed
+    env_file:
+      - ./apps/feed/.env
+    depends_on:
+      - mongodb-primary
+      - mongodb-secondary
+      - mongodb-arbiter
+      - auth
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3002:3002'
   auth:
     build:
       context: .

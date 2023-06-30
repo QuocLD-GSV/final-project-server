@@ -17,6 +17,7 @@ export const userStub = (): User => {
       },
     ],
     bio: "I'm a user.",
+    follower: [],
     isDeleted: false,
   };
 };
