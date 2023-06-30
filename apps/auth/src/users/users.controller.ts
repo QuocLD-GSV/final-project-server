@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { ApiOperation } from '@nestjs/swagger';
 import { Types } from 'mongoose';
 import JwtAuthGuard from '../guards/jwt-auth.guard';
 import { CreateUserRequest } from './dto/create-user.request';
@@ -8,7 +9,8 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
+  @ApiOperation({ description: 'register new user' })
+  @Post('register')
   async createUser(@Body() request: CreateUserRequest) {
     return this.usersService.createUser(request);
   }
