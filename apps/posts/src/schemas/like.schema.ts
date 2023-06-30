@@ -4,7 +4,7 @@ import { HydratedDocument, Schema as MongooseShema, now } from 'mongoose';
 
 export type LikeDocument = HydratedDocument<Like>;
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, collection: 'likes' })
 export class Like extends AbstractDocument {
   @Prop({ type: MongooseShema.Types.ObjectId, ref: 'User', required: true })
   author_id: string;

@@ -10,9 +10,15 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MessagePattern } from '@nestjs/microservices';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { Request, Response } from 'express';
+import { string } from 'joi';
 import { AuthService } from './auth.service';
-import { CurrentUser } from './current-user.decorator';
+import { CurrentUser } from './decorators/current-user.decorator';
 import JwtAuthGuard from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { User } from './users/schemas/user.schema';
@@ -24,6 +30,14 @@ export class AuthController {
     private readonly configService: ConfigService,
   ) {}
 
+  @ApiOperation({ description: 'login api' })
+  @ApiUnauthorizedResponse({ description: 'cant login' })
+  @ApiBody({
+    type: class LoginDto {
+      email: string;
+      password: string;
+    },
+  })
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(
@@ -39,6 +53,7 @@ export class AuthController {
     return { ...newUser, password: 'private' };
   }
 
+  @ApiOperation({ description: 'logout api' })
   @UseGuards(LocalAuthGuard)
   @Post('logout')
   logout(
@@ -58,6 +73,7 @@ export class AuthController {
     return user;
   }
 
+  @ApiOperation({ description: 'refresh api, send with cookies' })
   @Post('refresh')
   async refresh(
     @Req() request: any,
