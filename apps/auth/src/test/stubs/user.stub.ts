@@ -7,6 +7,8 @@ export const userStub = (): User => {
     email: 'example@gmail.com',
     password: 'password123',
     googleId: 'googleId123',
+    firstName: 'quoc',
+    lastName: 'le',
     dateOfBirth: new Date('2001-01-01'),
     avatar: 'avatar.jpg',
     roles: ['user'],
