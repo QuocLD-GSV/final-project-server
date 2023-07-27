@@ -28,6 +28,10 @@ export class PostsRepository extends AbstractRepository<Post> {
       .populate({
         path: 'comments',
         model: 'Comment',
+      })
+      .populate({
+        path: 'likes',
+        model: 'Like',
       });
   }
 }
