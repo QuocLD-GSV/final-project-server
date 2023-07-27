@@ -6,7 +6,7 @@ export type CommentDocument = HydratedDocument<Comment>;
 
 @Schema({ timestamps: true, collection: 'comments' })
 export class Comment extends AbstractDocument {
-  @Prop({ type: MongooseShema.Types.ObjectId, ref: 'Auth', required: true })
+  @Prop({ type: MongooseShema.Types.ObjectId, ref: 'User', required: true })
   author_id: string;
 
   @Prop({ type: String, required: true })

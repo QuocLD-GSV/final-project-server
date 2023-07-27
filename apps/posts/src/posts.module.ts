@@ -10,9 +10,9 @@ import { PostsService } from './posts.service';
 import { LikesRepository } from './repository/likes.repository';
 import { Like, LikeSchema } from './schemas/like.schema';
 import { Comment, CommentSchema } from './comments/schemas/comment.schema';
-import { User, UserSchema } from './schemas/user.schema';
 import { CommentsModule } from './comments/comments.module';
 import { CommentsRepository } from './comments/repositorys/comments.repository';
+import { User, UserSchema } from '@app/common/models/schemas/user.schema';
 
 @Module({
   imports: [

@@ -23,13 +23,14 @@ export class CommentsService {
     CommentErrors.INTERNAL_SERVER_ERROR,
     HttpStatus.INTERNAL_SERVER_ERROR,
   )
-  async createCommentToPost(
-    data: CreateCommentToPostDto,
-    user_id: Types.ObjectId,
-  ) {
+  async createCommentToPost(data: {
+    dataCreate: CreateCommentToPostDto;
+    user_id: Types.ObjectId;
+  }) {
+    console.log('data: ' + data.user_id);
     const comment = await this.commentsRepository.create({
-      ...data,
-      author_id: user_id,
+      ...data.dataCreate,
+      author_id: data.user_id,
     });
 
     await this.postsRepository.findOneAndUpdate(

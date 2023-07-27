@@ -49,10 +49,11 @@ export class CommentsController {
     @Payload() data: CreateCommentToPostDto,
     @Req() request: any,
   ) {
-    return this.commentsService.createCommentToPost(
-      data,
-      new Types.ObjectId(request.user._id),
-    );
+    console.log(request.user);
+    return this.commentsService.createCommentToPost({
+      dataCreate: data,
+      user_id: new Types.ObjectId(request.user._id),
+    });
   }
 
   @ApiOperation({ description: 'Create new reply to comment' })

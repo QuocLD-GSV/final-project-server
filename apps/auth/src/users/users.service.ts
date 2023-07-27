@@ -1,4 +1,5 @@
 import {
+  HttpStatus,
   Injectable,
   UnauthorizedException,
   UnprocessableEntityException,
@@ -8,6 +9,8 @@ import { UsersRepository } from './users.repository';
 import { CreateUserRequest } from './dto/create-user.request';
 import { User } from './schemas/user.schema';
 import { Types } from 'mongoose';
+import { InjectionHTTPExceptions } from '@app/common/decorators/try-catch';
+import { authErrors } from '../errors/auth.errors';
 
 @Injectable()
 export class UsersService {
@@ -42,6 +45,7 @@ export class UsersService {
     }
   }
 
+  @InjectionHTTPExceptions(authErrors.UNAUTHORIZED, HttpStatus.UNAUTHORIZED)
   async validateUser(email: string, password: string) {
     const user = await this.usersRepository.findOne({ email });
     const passwordIsValid = await bcrypt.compare(password, user.password);
@@ -86,5 +90,15 @@ export class UsersService {
       'authenticate.refreshToken': refreshToken,
       user_id: user_id,
     });
+  }
+
+  async userFollow(data: {
+    currentUserId: Types.ObjectId;
+    targetUserId: Types.ObjectId;
+  }) {
+    return await this.usersRepository.findOneAndUpdate(
+      { _id: data.targetUserId },
+      { $addToSet: data.currentUserId },
+    );
   }
 }
