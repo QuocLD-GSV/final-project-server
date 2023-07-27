@@ -15,4 +15,9 @@ export class PostsController {
   getNewFeedForUser(@Payload() data: GetPostByIdDto) {
     return this.postsService.getPostById(new Types.ObjectId(data.postId));
   }
+
+  @Get('all-post-likes')
+  getAllLikeUser(@Payload() data: GetPostByIdDto) {
+    return this.postsService.getAllLikedUser(new Types.ObjectId(data.postId));
+  }
 }
