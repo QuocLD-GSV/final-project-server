@@ -17,9 +17,13 @@ export class PostsRepository extends AbstractRepository<Post> {
 
   async getAllInforPostById(postId: Types.ObjectId) {
     return await this.model
-      .findOne({
-        _id: postId,
-      })
+      .findOne(
+        {
+          _id: postId,
+        },
+        {},
+        { lean: true },
+      )
       .populate({
         path: 'user_id',
         model: 'User',

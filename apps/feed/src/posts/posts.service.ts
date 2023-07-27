@@ -11,7 +11,13 @@ export class PostsService {
   ) {}
 
   async getPostById(postId: Types.ObjectId) {
-    return this.postsRepository.getAllInforPostById(postId);
+    const dataQuery = await this.postsRepository.getAllInforPostById(postId);
+
+    return {
+      ...dataQuery,
+      likeCount: dataQuery.likes.length || null,
+      commentCount: dataQuery.comments.length || null,
+    };
   }
 
   async getAllLikedUser(postId: Types.ObjectId) {
