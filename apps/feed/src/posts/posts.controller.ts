@@ -7,26 +7,18 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { Payload } from '@nestjs/microservices';
+import { Types } from 'mongoose';
+import { GetPostByIdDto } from './dto/get-post-by-id.dto';
+
 import { PostsService } from './posts.service';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
 
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.postsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postsService.findOne(+id);
+  @Get('get-post')
+  getNewFeedForUser(@Payload() data: GetPostByIdDto) {
+    return this.postsService.getPostById(new Types.ObjectId(data.postId));
   }
 }
