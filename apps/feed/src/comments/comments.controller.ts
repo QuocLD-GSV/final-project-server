@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { Payload } from '@nestjs/microservices';
 import { Types } from 'mongoose';
 import { CommentsService } from './comments.service';
