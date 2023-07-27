@@ -24,6 +24,10 @@ export class PostsService {
     return this.postRepository.find({});
   }
 
+  @InjectionHTTPExceptions(
+    PostErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
   async createPost(
     data: CreatePostDto,
     user_id: Types.ObjectId,
@@ -154,6 +158,10 @@ export class PostsService {
     );
   }
 
+  @InjectionHTTPExceptions(
+    PostErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
   async updatePost(data: UpdatePostDto) {
     const { post_id, ...dataUpdate } = data;
     console.log(dataUpdate);

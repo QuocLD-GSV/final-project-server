@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractDocument } from '@app/common';
+import { Schema as MongooseShema } from 'mongoose';
 
 export type UserDocument = User & Document;
 
@@ -33,6 +34,9 @@ export class User extends AbstractDocument {
 
   @Prop()
   bio: string;
+
+  @Prop({ type: [MongooseShema.Types.ObjectId], ref: 'User' })
+  follower: User[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

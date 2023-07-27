@@ -10,6 +10,12 @@ import * as Joi from 'joi';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PostsRepository } from './repository/posts.repository';
 import { Post, PostSchema } from '@app/common/models/schemas/post.schema';
+import { User, UserSchema } from '@app/common/models/schemas/user.schema';
+import {
+  Comment,
+  CommentSchema,
+} from '@app/common/models/schemas/comment.schema';
+import { Like, LikeSchema } from '@app/common/models/schemas/like.schema';
 
 @Module({
   imports: [
@@ -22,7 +28,12 @@ import { Post, PostSchema } from '@app/common/models/schemas/post.schema';
       envFilePath: './apps/feed/.env',
     }),
     DatabaseModule,
-    MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
+    MongooseModule.forFeature([
+      { name: Post.name, schema: PostSchema },
+      { name: User.name, schema: UserSchema },
+      { name: Comment.name, schema: CommentSchema },
+      { name: Like.name, schema: LikeSchema },
+    ]),
     AuthModule,
     RmqModule,
     PostsModule,

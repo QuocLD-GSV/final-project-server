@@ -5,8 +5,6 @@ import { FeedService } from './feed.service';
 export class FeedController {
   constructor(private readonly feedService: FeedService) {}
 
-  @Get()
-  getHello(): string {
-    return this.feedService.getHello();
-  }
+  @Get('newfeed')
+  getNewFeedForUser() {}
 }

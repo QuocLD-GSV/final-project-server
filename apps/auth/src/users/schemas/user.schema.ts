@@ -13,6 +13,12 @@ export class User extends AbstractDocument {
   password: string;
 
   @Prop()
+  firstName: string;
+
+  @Prop()
+  lastName: string;
+
+  @Prop()
   googleId: string;
 
   @Prop()
