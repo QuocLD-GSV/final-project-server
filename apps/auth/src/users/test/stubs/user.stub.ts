@@ -4,6 +4,8 @@ import { User } from '../../schemas/user.schema';
 const userStub: User = Object.assign(new User(), {
   _id: new Types.ObjectId(),
   email: 'example@gmail.com',
+  firstName: 'quoc',
+  lastName: 'le',
   password: 'password123',
   googleId: 'googleId123',
   dateOfBirth: new Date('2001-01-01'),

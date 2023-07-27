@@ -8,6 +8,12 @@ export class CreateUserRequest {
   @IsNotEmpty()
   password: string;
 
+  @IsNotEmpty()
+  firstName: string;
+
+  @IsNotEmpty()
+  lastName: string;
+
   googleId: string;
 
   dateOfBirth: Date;
