@@ -1,15 +1,15 @@
+import { CommentsRepository } from '@app/common/repositories/comments.repository';
+import { LikesRepository } from '@app/common/repositories/likes.repository';
+import { PostsRepository } from '@app/common/repositories/posts.repository';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { InjectionHTTPExceptions } from '../../../../libs/common/src/decorators/try-catch';
-import { LikesRepository } from '../repository/likes.repository';
-import { PostsRepository } from '../repository/posts.repository';
 import { CreateCommentToPostDto } from './dto/comment-post.dto';
 import { CreateCommentReplyDto } from './dto/comment-reply.dto';
 import { DeleteCommentDto } from './dto/delete-comment.dto';
 import { LikeCommentDto } from './dto/like-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { CommentErrors } from './errors/comments.errors';
-import { CommentsRepository } from './repositorys/comments.repository';
 
 @Injectable()
 export class CommentsService {
@@ -23,13 +23,14 @@ export class CommentsService {
     CommentErrors.INTERNAL_SERVER_ERROR,
     HttpStatus.INTERNAL_SERVER_ERROR,
   )
-  async createCommentToPost(
-    data: CreateCommentToPostDto,
-    user_id: Types.ObjectId,
-  ) {
+  async createCommentToPost(data: {
+    dataCreate: CreateCommentToPostDto;
+    user_id: Types.ObjectId;
+  }) {
+    console.log('data: ' + data.user_id);
     const comment = await this.commentsRepository.create({
-      ...data,
-      author_id: user_id,
+      ...data.dataCreate,
+      author_id: data.user_id,
     });
 
     await this.postsRepository.findOneAndUpdate(

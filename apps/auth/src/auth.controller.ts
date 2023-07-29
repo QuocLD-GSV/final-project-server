@@ -1,3 +1,4 @@
+import { User } from '@app/common/models/schemas/user.schema';
 import {
   Controller,
   HttpException,
@@ -21,7 +22,6 @@ import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import JwtAuthGuard from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { User } from './users/schemas/user.schema';
 
 @Controller('auth')
 export class AuthController {

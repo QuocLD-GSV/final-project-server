@@ -1,14 +1,14 @@
+import { CommentsRepository } from '@app/common/repositories/comments.repository';
+import { LikesRepository } from '@app/common/repositories/likes.repository';
+import { PostsRepository } from '@app/common/repositories/posts.repository';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { S3 } from 'aws-sdk';
 import { Types } from 'mongoose';
 import { InjectionHTTPExceptions } from '../../../libs/common/src/decorators/try-catch';
-import { CommentsRepository } from './comments/repositorys/comments.repository';
 import { CreatePostDto } from './dto/create-new-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PostErrors } from './errors/posts.errors';
-import { LikesRepository } from './repository/likes.repository';
-import { PostsRepository } from './repository/posts.repository';
 import { generateAwsKey } from './utils/awsKey.utils';
 
 @Injectable()
@@ -164,7 +164,6 @@ export class PostsService {
   )
   async updatePost(data: UpdatePostDto) {
     const { post_id, ...dataUpdate } = data;
-    console.log(dataUpdate);
 
     return this.postRepository.findOneAndUpdate(
       { _id: new Types.ObjectId(data.post_id) },
