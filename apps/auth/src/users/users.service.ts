@@ -5,12 +5,12 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { UsersRepository } from './users.repository';
 import { CreateUserRequest } from './dto/create-user.request';
 import { Types } from 'mongoose';
 import { InjectionHTTPExceptions } from '@app/common/decorators/try-catch';
 import { authErrors } from '../errors/auth.errors';
 import { User } from '@app/common/models/schemas/user.schema';
+import { UsersRepository } from '@app/common/repositories/users.repository';
 
 @Injectable()
 export class UsersService {
@@ -56,7 +56,7 @@ export class UsersService {
   }
 
   async getUserById(id: Types.ObjectId) {
-    return this.usersRepository.findOne({ _id: id });
+    return this.usersRepository.validateUserById(id);
   }
 
   async addNewRefreshToken(values: {

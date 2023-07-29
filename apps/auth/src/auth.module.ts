@@ -30,10 +30,11 @@ import { UsersModule } from './users/users.module';
           expiresIn: `${configService.get('JWT_EXPIRATION')}s`,
         },
       }),
+
       inject: [ConfigService],
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, ConfigService],
 })
 export class AuthModule {}

@@ -25,10 +25,11 @@ export class UsersController {
     return this.usersService.createUser(request);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get()
+  @Get('id')
   getUserById(@Req() request: any) {
-    return this.usersService.getUserById(new Types.ObjectId(request.user._id));
+    return this.usersService.getUserById(
+      new Types.ObjectId('64c4df8afcf9ee26836db38d'),
+    );
   }
 
   @Get()
