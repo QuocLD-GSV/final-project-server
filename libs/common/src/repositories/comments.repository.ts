@@ -1,8 +1,8 @@
 import { AbstractRepository } from '@app/common';
+import { Comment } from '@app/common/models/schemas/comment.schema';
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model, Types } from 'mongoose';
-import { Comment } from '../schemas/comment.schema';
 
 @Injectable()
 export class CommentsRepository extends AbstractRepository<Comment> {

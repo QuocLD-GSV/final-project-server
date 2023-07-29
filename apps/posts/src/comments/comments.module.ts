@@ -2,13 +2,16 @@ import { Module } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CommentsController } from './comments.controller';
 import { AuthModule } from '@app/common';
-import { LikesRepository } from '../repository/likes.repository';
-import { CommentsRepository } from './repositorys/comments.repository';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Like, LikeSchema } from '../schemas/like.schema';
-import { Comment, CommentSchema } from './schemas/comment.schema';
-import { Post, PostSchema } from '../schemas/post.schema';
-import { PostsRepository } from '../repository/posts.repository';
+import { Like, LikeSchema } from '@app/common/models/schemas/like.schema';
+import { Post, PostSchema } from '@app/common/models/schemas/post.schema';
+import { LikesRepository } from '@app/common/repositories/likes.repository';
+import { PostsRepository } from '@app/common/repositories/posts.repository';
+import {
+  CommentSchema,
+  Comment,
+} from '@app/common/models/schemas/comment.schema';
+import { CommentsRepository } from '@app/common/repositories/comments.repository';
 
 @Module({
   imports: [
