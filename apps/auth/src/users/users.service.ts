@@ -7,10 +7,10 @@ import {
 import * as bcrypt from 'bcrypt';
 import { UsersRepository } from './users.repository';
 import { CreateUserRequest } from './dto/create-user.request';
-import { User } from './schemas/user.schema';
 import { Types } from 'mongoose';
 import { InjectionHTTPExceptions } from '@app/common/decorators/try-catch';
 import { authErrors } from '../errors/auth.errors';
+import { User } from '@app/common/models/schemas/user.schema';
 
 @Injectable()
 export class UsersService {

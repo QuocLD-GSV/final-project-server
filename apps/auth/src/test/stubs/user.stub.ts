@@ -1,5 +1,5 @@
+import { User } from '@app/common/models/schemas/user.schema';
 import { Types } from 'mongoose';
-import { User } from '../../users/schemas/user.schema';
 
 export const userStub = (): User => {
   return {

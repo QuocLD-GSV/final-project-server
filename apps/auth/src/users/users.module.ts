@@ -3,12 +3,10 @@ import { UsersRepository } from './users.repository';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from './schemas/user.schema';
 import { JwtStrategy } from '../strategies/jwt.strategy';
 import { LocalStrategy } from '../strategies/local.strategy';
-import { JwtModule } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
 import JwtAuthGuard from '../guards/jwt-auth.guard';
+import { User, UserSchema } from '@app/common/models/schemas/user.schema';
 
 @Module({
   imports: [

@@ -2,10 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import RefreshToken from './entities/refresh-token.entity';
-import { User } from './users/schemas/user.schema';
 import { sign, verify, decode } from 'jsonwebtoken';
 import { UsersService } from './users/users.service';
 import { Types } from 'mongoose';
+import { User } from '@app/common/models/schemas/user.schema';
 
 export interface TokenPayload {
   userId: string;
