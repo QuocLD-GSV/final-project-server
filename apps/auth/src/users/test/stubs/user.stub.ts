@@ -1,5 +1,5 @@
+import { User } from '@app/common/models/schemas/user.schema';
 import { Types } from 'mongoose';
-import { User } from '../../schemas/user.schema';
 
 const userStub: User = Object.assign(new User(), {
   _id: new Types.ObjectId(),
