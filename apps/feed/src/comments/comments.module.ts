@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CommentsController } from './comments.controller';
-import { CommentsRepository } from '../repository/comments.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
   Comment,
   CommentSchema,
 } from '@app/common/models/schemas/comment.schema';
+import { CommentsRepository } from '@app/common/repositories/comments.repository';
 
 @Module({
   imports: [

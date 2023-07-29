@@ -8,7 +8,6 @@ import { AuthModule, DatabaseModule, RmqModule } from '@app/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { MongooseModule } from '@nestjs/mongoose';
-import { PostsRepository } from './repository/posts.repository';
 import { Post, PostSchema } from '@app/common/models/schemas/post.schema';
 import { User, UserSchema } from '@app/common/models/schemas/user.schema';
 import {
@@ -16,6 +15,7 @@ import {
   CommentSchema,
 } from '@app/common/models/schemas/comment.schema';
 import { Like, LikeSchema } from '@app/common/models/schemas/like.schema';
+import { PostsRepository } from '@app/common/repositories/posts.repository';
 
 @Module({
   imports: [

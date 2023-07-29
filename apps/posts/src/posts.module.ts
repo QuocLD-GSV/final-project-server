@@ -3,16 +3,19 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import * as Joi from 'joi';
-import { Post, PostSchema } from './schemas/post.schema';
 import { PostsController } from './posts.controller';
-import { PostsRepository } from './repository/posts.repository';
 import { PostsService } from './posts.service';
-import { LikesRepository } from './repository/likes.repository';
-import { Like, LikeSchema } from './schemas/like.schema';
-import { Comment, CommentSchema } from './comments/schemas/comment.schema';
 import { CommentsModule } from './comments/comments.module';
-import { CommentsRepository } from './comments/repositorys/comments.repository';
 import { User, UserSchema } from '@app/common/models/schemas/user.schema';
+import { Like, LikeSchema } from '@app/common/models/schemas/like.schema';
+import { Post, PostSchema } from '@app/common/models/schemas/post.schema';
+import { LikesRepository } from '@app/common/repositories/likes.repository';
+import { PostsRepository } from '@app/common/repositories/posts.repository';
+import {
+  CommentSchema,
+  Comment,
+} from '@app/common/models/schemas/comment.schema';
+import { CommentsRepository } from '@app/common/repositories/comments.repository';
 
 @Module({
   imports: [

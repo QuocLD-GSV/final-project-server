@@ -1,7 +1,7 @@
+import { LikesRepository } from '@app/common/repositories/likes.repository';
+import { PostsRepository } from '@app/common/repositories/posts.repository';
 import { Injectable } from '@nestjs/common';
 import { Types } from 'mongoose';
-import { LikesRepository } from '../repository/likes.repository';
-import { PostsRepository } from '../repository/posts.repository';
 
 @Injectable()
 export class PostsService {
