@@ -1,6 +1,7 @@
 import { User } from '@app/common/models/schemas/user.schema';
 import {
   Controller,
+  Get,
   HttpException,
   HttpStatus,
   Ip,
@@ -22,6 +23,8 @@ import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import JwtAuthGuard from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import LocalJwtAuthGuard from './guards/local-jwt-auth.guard';
+import { JwtLocalStrategy } from './strategies/local-jwt.strategy';
 
 @Controller('auth')
 export class AuthController {
@@ -54,7 +57,7 @@ export class AuthController {
   }
 
   @ApiOperation({ description: 'logout api' })
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalJwtAuthGuard)
   @Post('logout')
   logout(
     @CurrentUser() user: User,
@@ -80,5 +83,12 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ) {
     return this.authService.refresh(request.cookies['RefreshToken'], response);
+  }
+
+  @UseGuards(LocalJwtAuthGuard)
+  @Get('test')
+  async test(@Req() request: any) {
+    console.log(request.cookies);
+    return request.user;
   }
 }

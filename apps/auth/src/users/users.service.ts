@@ -56,7 +56,12 @@ export class UsersService {
   }
 
   async getUserById(id: Types.ObjectId) {
-    return this.usersRepository.validateUserById(id);
+    console.log('Checking in Service');
+    const returnUser = await this.usersRepository.findOne(id);
+    if (!returnUser) {
+      console.log('cant not find in repository');
+    }
+    return returnUser;
   }
 
   async addNewRefreshToken(values: {

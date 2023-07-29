@@ -19,6 +19,7 @@ const userStub: User = Object.assign(new User(), {
   ],
   bio: "I'm a user.",
   isDeleted: false,
+  follower: [],
 });
 
 console.log(userStub);
