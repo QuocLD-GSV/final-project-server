@@ -11,6 +11,7 @@ import { Payload } from '@nestjs/microservices';
 import { ApiOperation, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { Types } from 'mongoose';
 import JwtAuthGuard from '../guards/jwt-auth.guard';
+import LocalJwtAuthGuard from '../guards/local-jwt-auth.guard';
 import { CreateUserRequest } from './dto/create-user.request';
 import { FollowUserDto } from './dto/follow-user.dto';
 import { UsersService } from './users.service';
@@ -39,7 +40,7 @@ export class UsersController {
 
   @ApiOperation({ description: 'follow a user by current user' })
   @ApiUnauthorizedResponse({ description: 'login first to follow user' })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(LocalJwtAuthGuard)
   @Patch('follow')
   userFollow(@Payload() data: FollowUserDto, @Req() request: any) {
     return this.usersService.userFollow({

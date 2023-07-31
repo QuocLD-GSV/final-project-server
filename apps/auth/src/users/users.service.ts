@@ -56,12 +56,7 @@ export class UsersService {
   }
 
   async getUserById(id: Types.ObjectId) {
-    console.log('Checking in Service');
-    const returnUser = await this.usersRepository.findOne(id);
-    if (!returnUser) {
-      console.log('cant not find in repository');
-    }
-    return returnUser;
+    return await this.usersRepository.findOne(id);
   }
 
   async addNewRefreshToken(values: {
@@ -103,7 +98,11 @@ export class UsersService {
   }) {
     return await this.usersRepository.findOneAndUpdate(
       { _id: data.targetUserId },
-      { $addToSet: data.currentUserId },
+      {
+        $addToSet: {
+          follower: data.currentUserId,
+        },
+      },
     );
   }
 }

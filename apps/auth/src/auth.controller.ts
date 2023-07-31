@@ -1,37 +1,21 @@
 import { User } from '@app/common/models/schemas/user.schema';
-import {
-  Controller,
-  Get,
-  HttpException,
-  HttpStatus,
-  Ip,
-  Post,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Controller, Get, Ip, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import {
   ApiBody,
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { Request, Response } from 'express';
-import { string } from 'joi';
+import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import JwtAuthGuard from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import LocalJwtAuthGuard from './guards/local-jwt-auth.guard';
-import { JwtLocalStrategy } from './strategies/local-jwt.strategy';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @ApiOperation({ description: 'login api' })
   @ApiUnauthorizedResponse({ description: 'cant login' })
