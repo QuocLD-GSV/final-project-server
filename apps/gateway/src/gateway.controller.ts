@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 
 @Controller()
 export class GatewayController {
-  constructor(s) {}
+  constructor() {}
 
   @Get()
   getHello(): string {
