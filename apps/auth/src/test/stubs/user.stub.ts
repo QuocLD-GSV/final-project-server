@@ -20,6 +20,7 @@ export const userStub = (): User => {
     ],
     bio: "I'm a user.",
     follower: [],
+    following: [],
     isDeleted: false,
   };
 };

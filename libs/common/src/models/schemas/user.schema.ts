@@ -43,6 +43,9 @@ export class User extends AbstractDocument {
 
   @Prop({ type: [MongooseShema.Types.ObjectId], ref: 'User' })
   follower: User[];
+
+  @Prop({ type: [MongooseShema.Types.ObjectId], ref: 'User' })
+  following: User[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

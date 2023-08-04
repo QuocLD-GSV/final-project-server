@@ -1,34 +1,21 @@
 import { User } from '@app/common/models/schemas/user.schema';
-import {
-  Controller,
-  HttpException,
-  HttpStatus,
-  Ip,
-  Post,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Controller, Get, Ip, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import {
   ApiBody,
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { Request, Response } from 'express';
-import { string } from 'joi';
+import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import JwtAuthGuard from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import LocalJwtAuthGuard from './guards/local-jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @ApiOperation({ description: 'login api' })
   @ApiUnauthorizedResponse({ description: 'cant login' })
@@ -54,7 +41,7 @@ export class AuthController {
   }
 
   @ApiOperation({ description: 'logout api' })
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalJwtAuthGuard)
   @Post('logout')
   logout(
     @CurrentUser() user: User,
@@ -80,5 +67,12 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ) {
     return this.authService.refresh(request.cookies['RefreshToken'], response);
+  }
+
+  @UseGuards(LocalJwtAuthGuard)
+  @Get('test')
+  async test(@Req() request: any) {
+    console.log(request.cookies);
+    return request.user;
   }
 }

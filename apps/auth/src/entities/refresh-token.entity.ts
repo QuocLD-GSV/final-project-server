@@ -1,4 +1,3 @@
-import { ConfigService } from '@nestjs/config';
 import { sign } from 'jsonwebtoken';
 
 class RefreshToken {

@@ -1,4 +1,5 @@
 import {
+  HttpException,
   HttpStatus,
   Injectable,
   UnauthorizedException,
@@ -20,6 +21,10 @@ export class UsersService {
     return this.usersRepository.find({});
   }
 
+  @InjectionHTTPExceptions(
+    authErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
   async createUser(request: CreateUserRequest) {
     await this.validateCreateUserRequest(request);
     const user = await this.usersRepository.create({
@@ -32,6 +37,10 @@ export class UsersService {
     return user;
   }
 
+  @InjectionHTTPExceptions(
+    authErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
   private async validateCreateUserRequest(request: CreateUserRequest) {
     let user: User;
     try {
@@ -45,6 +54,10 @@ export class UsersService {
     }
   }
 
+  @InjectionHTTPExceptions(
+    authErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
   @InjectionHTTPExceptions(authErrors.UNAUTHORIZED, HttpStatus.UNAUTHORIZED)
   async validateUser(email: string, password: string) {
     const user = await this.usersRepository.findOne({ email });
@@ -55,10 +68,18 @@ export class UsersService {
     return user;
   }
 
+  @InjectionHTTPExceptions(
+    authErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
   async getUserById(id: Types.ObjectId) {
-    return this.usersRepository.validateUserById(id);
+    return await this.usersRepository.findOne(id);
   }
 
+  @InjectionHTTPExceptions(
+    authErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
   async addNewRefreshToken(values: {
     refreshToken: string;
     user_id: Types.ObjectId;
@@ -71,6 +92,10 @@ export class UsersService {
     });
   }
 
+  @InjectionHTTPExceptions(
+    authErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
   async removeRefreshToken(values: {
     refreshToken: string;
     user_id: Types.ObjectId;
@@ -81,6 +106,10 @@ export class UsersService {
     });
   }
 
+  @InjectionHTTPExceptions(
+    authErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
   async verifiyRefreshTokenLoggedIn(values: {
     refreshToken: string;
     user_id: Types.ObjectId;
@@ -92,13 +121,64 @@ export class UsersService {
     });
   }
 
+  @InjectionHTTPExceptions(
+    authErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
   async userFollow(data: {
     currentUserId: Types.ObjectId;
     targetUserId: Types.ObjectId;
   }) {
-    return await this.usersRepository.findOneAndUpdate(
-      { _id: data.targetUserId },
-      { $addToSet: data.currentUserId },
-    );
+    const targetUserCheck = await this.usersRepository.findOne({
+      _id: data.targetUserId,
+      follower: data.currentUserId,
+    });
+
+    if ((data.currentUserId = data.targetUserId)) {
+      throw new HttpException('cant not flow yourself', HttpStatus.BAD_REQUEST);
+    }
+
+    if (!targetUserCheck) {
+      //Update from currentUser
+      await this.usersRepository.findOneAndUpdate(
+        { _id: data.currentUserId },
+        {
+          $addToSet: {
+            following: data.targetUserId,
+          },
+        },
+      );
+      //Update from tagetUser
+      const returnUser = await this.usersRepository.findOneAndUpdate(
+        { _id: data.targetUserId },
+        {
+          $addToSet: {
+            follower: data.currentUserId,
+          },
+        },
+      );
+      return returnUser;
+    } else {
+      //Update from currentUser
+      await this.usersRepository.findOneAndUpdate(
+        { _id: data.currentUserId },
+        {
+          $pull: {
+            following: data.targetUserId,
+          },
+        },
+      );
+
+      //Update from tagetUser
+      const returnUser = await this.usersRepository.findOneAndUpdate(
+        { _id: data.targetUserId },
+        {
+          $pull: {
+            follower: data.currentUserId,
+          },
+        },
+      );
+      return returnUser;
+    }
   }
 }
