@@ -7,7 +7,7 @@ import { TokenPayload } from '../auth.service';
 import { UsersService } from '../users/users.service';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtLocalStrategy extends PassportStrategy(Strategy, 'local-jwt') {
   constructor(
     configService: ConfigService,
     private readonly usersService: UsersService,
@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: any) => {
-          return request?.Authentication;
+          return request?.cookies?.Authentication;
         },
       ]),
       secretOrKey: configService.get('JWT_SECRET'),
