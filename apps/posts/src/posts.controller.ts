@@ -11,7 +11,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { Payload } from '@nestjs/microservices';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { Types } from 'mongoose';
 import { CreatePostDto } from './dto/create-new-post.dto';
 import { LikePostDto } from './dto/like-post.dto';
@@ -27,7 +27,9 @@ import { UpdatePostDto } from './dto/update-post.dto';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Get()
+  @MessagePattern({
+    cmd: 'get-users',
+  })
   getHello() {
     return this.postsService.getAll();
   }

@@ -30,7 +30,7 @@ export class UsersController {
   @Get('id')
   getUserById(@Req() request: any) {
     return this.usersService.getUserById(
-      new Types.ObjectId('64c4df8afcf9ee26836db38d'),
+      new Types.ObjectId('64c76fdf72d91eb2b678d97b'),
     );
   }
 
