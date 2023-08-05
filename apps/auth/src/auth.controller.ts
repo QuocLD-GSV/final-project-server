@@ -37,7 +37,9 @@ export class AuthController {
       ipAddress: ipAddress,
       userAgent: request.userAgent,
     });
-    return { ...newUser, password: 'private' };
+    delete newUser.authenticate;
+    delete newUser.password;
+    return newUser;
   }
 
   @ApiOperation({ description: 'logout api' })

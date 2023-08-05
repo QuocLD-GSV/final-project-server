@@ -16,6 +16,7 @@ import {
   Comment,
 } from '@app/common/models/schemas/comment.schema';
 import { CommentsRepository } from '@app/common/repositories/comments.repository';
+import { service } from '@app/common/constants/services.constants';
 
 @Module({
   imports: [
@@ -35,7 +36,9 @@ import { CommentsRepository } from '@app/common/repositories/comments.repository
       { name: User.name, schema: UserSchema },
     ]),
     AuthModule,
-    RmqModule,
+    RmqModule.register({
+      name: service.AUTH_SERVICE,
+    }),
     CommentsModule,
   ],
   controllers: [PostsController],
