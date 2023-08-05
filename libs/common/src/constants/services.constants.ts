@@ -1,5 +1,5 @@
 export const service = {
-  POSTS_SERVICE: 'POSTS',
+  POSTS_SERVICE: 'POST',
   AUTH_SERVICE: 'AUTH',
   FEED_SERVICE: 'FEED',
 };
