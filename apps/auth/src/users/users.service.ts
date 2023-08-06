@@ -80,6 +80,20 @@ export class UsersService {
     authErrors.INTERNAL_SERVER_ERROR,
     HttpStatus.INTERNAL_SERVER_ERROR,
   )
+  async returnUserDetail(id: Types.ObjectId) {
+    const { password, authenticate, ...user } =
+      await this.usersRepository.returnUserDetail(id);
+    return {
+      followerCount: user.follower.length,
+      followingCount: user.following.length,
+      ...user,
+    };
+  }
+
+  @InjectionHTTPExceptions(
+    authErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
   async addNewRefreshToken(values: {
     refreshToken: string;
     user_id: Types.ObjectId;

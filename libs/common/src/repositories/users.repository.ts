@@ -15,6 +15,24 @@ export class UsersRepository extends AbstractRepository<User> {
     super(userModel, connection);
   }
 
+  async returnUserDetail(userId: Types.ObjectId) {
+    const user = await this.model
+      .findOne({ _id: userId }, {}, { lean: true })
+      .populate([
+        {
+          path: 'follower',
+          model: 'User',
+          select: ['email', '_id', 'firstName', 'lastName', 'avatar'],
+        },
+        {
+          path: 'following',
+          model: 'User',
+          select: ['email', '_id', 'firstName', 'lastName', 'avatar'],
+        },
+      ]);
+    return user;
+  }
+
   async validateUserById(userId: Types.ObjectId) {
     return await this.model.find({ _id: userId }, {}, { lean: true });
   }
