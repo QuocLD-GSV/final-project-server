@@ -9,7 +9,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { Payload } from '@nestjs/microservices';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { ApiOperation, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { Types } from 'mongoose';
 import LocalJwtAuthGuard from '../guards/local-jwt-auth.guard';
@@ -37,6 +37,11 @@ export class UsersController {
   @Get()
   getAll() {
     return this.usersService.getAll();
+  }
+
+  @MessagePattern({ cmd: 'get-user-details' })
+  async getUserDetails(@Payload() data: any) {
+    return this.usersService.returnUserDetail(new Types.ObjectId(data.userId));
   }
 
   @ApiOperation({ description: 'follow or unfollow a user by current user' })
