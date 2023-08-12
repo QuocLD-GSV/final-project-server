@@ -8,10 +8,6 @@ import {
   Get,
   Inject,
   Param,
-  Post,
-  Req,
-  Res,
-  UseGuards,
 } from '@nestjs/common';
 import { ClientProxy, Payload } from '@nestjs/microservices';
 import { ApiOperation } from '@nestjs/swagger';
@@ -42,20 +38,20 @@ export class GatewayController {
     }
   }
 
-  @ApiOperation({ description: 'get all users' })
+  @ApiOperation({ description: 'get public post' })
   @Get()
   async getHello() {
-    const users$ = this.postsClient.send(
+    const posts$ = this.feedClient.send(
       {
-        cmd: 'get-users',
+        cmd: 'get-public-posts',
       },
       {},
     );
-    return firstValueFrom(users$);
+    return firstValueFrom(posts$);
   }
 
-  @Get('newfeed')
+  /* @Get('newfeed')
   getNewFeed(@CurrentUser() user: User) {
     return this.feedClient.send({ cmd: 'get-newfeed' }, {});
-  }
+  } */
 }

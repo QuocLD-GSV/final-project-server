@@ -28,4 +28,12 @@ export class PostsService {
     const dataQuery = await this.postsRepository.find({});
     return dataQuery;
   }
+
+  async getPublicPostsPaginate(page: number, size: number) {
+    const publicPost = await this.postsRepository.findAndPaginate(
+      {},
+      { pageNumber: page, pageSize: size },
+    );
+    return publicPost;
+  }
 }

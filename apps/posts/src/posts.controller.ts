@@ -27,13 +27,6 @@ import { UpdatePostDto } from './dto/update-post.dto';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @MessagePattern({
-    cmd: 'get-users',
-  })
-  getHello() {
-    return this.postsService.getAll();
-  }
-
   @ApiOperation({ description: 'Create new post' })
   @ApiCreatedResponse({ description: 'Return new post' })
   @UseGuards(JwtAuthGuard)

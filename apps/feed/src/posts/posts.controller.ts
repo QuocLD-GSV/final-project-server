@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { ApiOperation } from '@nestjs/swagger';
 import { Types } from 'mongoose';
@@ -21,8 +21,8 @@ export class PostsController {
     return this.postsService.getAllLikedUser(new Types.ObjectId(data.postId));
   }
 
-  @MessagePattern({ cmd: 'get-newfeed' })
-  getNewFeedForUser(@Payload() data: any) {
-    return 'hello';
+  @Get('public-posts')
+  getNewFeedForUser(@Query('page') page: number, @Query('size') size: number) {
+    return this.postsService.getPublicPostsPaginate(page, size);
   }
 }
