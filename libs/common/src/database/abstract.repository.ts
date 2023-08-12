@@ -84,4 +84,17 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     });
     return documents;
   }
+
+  async findAndPaginate(
+    filterQuery: FilterQuery<TDocument>,
+    filterOption: { pageNumber: number; pageSize: number },
+  ): Promise<TDocument[]> {
+    const skipAmount = (filterOption.pageNumber - 1) * filterOption.pageSize;
+
+    return this.model
+      .find(filterQuery)
+      .skip(skipAmount)
+      .limit(filterOption.pageSize)
+      .exec();
+  }
 }
