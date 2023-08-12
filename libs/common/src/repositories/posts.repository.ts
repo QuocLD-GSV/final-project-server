@@ -16,9 +16,9 @@ export class PostsRepository extends AbstractRepository<Post> {
   }
 
   async findAndPaginatePublicPosts(
-    filterQuery: FilterQuery<Document>,
+    filterQuery: FilterQuery<Post>,
     filterOption: { pageNumber: number; pageSize: number },
-  ): Promise<Document[]> {
+  ): Promise<Post[]> {
     const skipAmount = (filterOption.pageNumber - 1) * filterOption.pageSize;
 
     return await this.model

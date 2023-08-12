@@ -24,10 +24,10 @@ export class PostsService {
     return this.postRepository.find({});
   }
 
-  @InjectionHTTPExceptions(
+  /*  @InjectionHTTPExceptions(
     PostErrors.INTERNAL_SERVER_ERROR,
     HttpStatus.INTERNAL_SERVER_ERROR,
-  )
+  ) */
   async createPost(
     data: CreatePostDto,
     user_id: Types.ObjectId,
@@ -47,10 +47,9 @@ export class PostsService {
       );
     }
 
-    for (let i = 0; i < data.users_tag.length; i++) {}
-
     return await this.postRepository.create({
       ...data,
+      user_tag: data.users_tag,
       user_id: user_id,
       media: [...filesUploaded],
       type: 'image',

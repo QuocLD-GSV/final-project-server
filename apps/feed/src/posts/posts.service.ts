@@ -1,6 +1,7 @@
 import { LikesRepository } from '@app/common/repositories/likes.repository';
 import { PostsRepository } from '@app/common/repositories/posts.repository';
 import { Injectable } from '@nestjs/common';
+import { Post } from 'apps/posts/schemas/post.schema';
 import { Types } from 'mongoose';
 
 @Injectable()
@@ -30,8 +31,8 @@ export class PostsService {
   }
 
   async getPublicPostsPaginate(page: number, size: number) {
-    const publicPost = await this.postsRepository.findAndPaginate(
-      {},
+    const publicPost = await this.postsRepository.findAndPaginatePublicPosts(
+      { public: true, published: true },
       { pageNumber: page, pageSize: size },
     );
     return publicPost;

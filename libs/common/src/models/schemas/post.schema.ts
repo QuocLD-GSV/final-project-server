@@ -47,6 +47,15 @@ export class Post extends AbstractDocument {
     key: string;
   }[];
 
+  @Prop([
+    {
+      type: MongooseShema.Types.ObjectId,
+      ref: 'User',
+      required: false,
+    },
+  ])
+  user_tag: User[];
+
   @Prop({
     type: {
       latitude: { type: Number },

@@ -16,6 +16,9 @@ export class UpdatePostDto {
   };
 
   @ApiProperty()
+  public: boolean;
+
+  @ApiProperty()
   published: boolean;
 
   @ApiProperty()
