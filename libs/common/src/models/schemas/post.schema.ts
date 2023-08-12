@@ -59,6 +59,9 @@ export class Post extends AbstractDocument {
     longitude: number;
   };
 
+  @Prop({ type: Boolean, default: true })
+  public: boolean;
+
   @Prop({ type: Boolean, default: false })
   published: boolean;
 }
