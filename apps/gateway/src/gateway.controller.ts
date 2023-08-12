@@ -53,4 +53,9 @@ export class GatewayController {
     );
     return firstValueFrom(users$);
   }
+
+  @Get('newfeed')
+  getNewFeed(@CurrentUser() user: User) {
+    return this.feedClient.send({ cmd: 'get-newfeed' }, {});
+  }
 }

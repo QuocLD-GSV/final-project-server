@@ -1,3 +1,4 @@
+import { PostsRepository } from '@app/common/repositories/posts.repository';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

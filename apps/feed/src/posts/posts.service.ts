@@ -23,4 +23,9 @@ export class PostsService {
   async getAllLikedUser(postId: Types.ObjectId) {
     return await this.likesRepository.returnAllLike(postId);
   }
+
+  async getNewFeedForUser() {
+    const dataQuery = await this.postsRepository.find({});
+    return dataQuery;
+  }
 }
