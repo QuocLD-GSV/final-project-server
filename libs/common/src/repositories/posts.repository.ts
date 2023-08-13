@@ -23,12 +23,13 @@ export class PostsRepository extends AbstractRepository<Post> {
 
     return await this.model
       .find(filterQuery, {}, { lean: true })
+      .sort({ createdAt: -1 })
       .skip(skipAmount)
       .limit(filterOption.pageSize)
       .populate({
         path: 'user_id',
         model: 'User',
-        select: ['_id', 'firstName', 'lastName'],
+        select: ['_id', 'firstName', 'lastName', 'avatar'],
       })
       .populate({
         path: 'comments',

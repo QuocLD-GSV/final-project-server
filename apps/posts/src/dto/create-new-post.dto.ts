@@ -15,6 +15,9 @@ export class CreatePostDto {
     longitude: number;
   };
 
+  @ApiProperty()
+  avatar: string;
+
   @ApiProperty({ description: 'list of id user tag' })
   users_tag: string[];
 }
