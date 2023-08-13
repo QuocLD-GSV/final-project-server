@@ -73,7 +73,17 @@ export class UsersService {
     HttpStatus.INTERNAL_SERVER_ERROR,
   )
   async getUserById(id: Types.ObjectId) {
-    return await this.usersRepository.findOne(id);
+    const user = await this.usersRepository.findOne(id);
+    delete user.password;
+    return user;
+  }
+
+  @InjectionHTTPExceptions(
+    authErrors.INTERNAL_SERVER_ERROR,
+    HttpStatus.INTERNAL_SERVER_ERROR,
+  )
+  async getCurrentUser(id: Types.ObjectId) {
+    return await this.usersRepository.returnUserDetail(id);
   }
 
   @InjectionHTTPExceptions(
