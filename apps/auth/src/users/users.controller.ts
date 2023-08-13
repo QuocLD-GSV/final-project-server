@@ -2,8 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
   Patch,
   Post,
   Req,
@@ -29,9 +27,13 @@ export class UsersController {
 
   @Get('id')
   getUserById(@Req() request: any) {
-    return this.usersService.getUserById(
-      new Types.ObjectId('64c76fdf72d91eb2b678d97b'),
-    );
+    return this.usersService.getUserById(new Types.ObjectId(request.user._id));
+  }
+
+  @UseGuards(LocalJwtAuthGuard)
+  @Get('current')
+  getCurrentUser(@Req() request: any) {
+    return this.usersService.getUserById(new Types.ObjectId(request.user._id));
   }
 
   @Get()
