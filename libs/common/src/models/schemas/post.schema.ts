@@ -47,6 +47,15 @@ export class Post extends AbstractDocument {
     key: string;
   }[];
 
+  @Prop([
+    {
+      type: MongooseShema.Types.ObjectId,
+      ref: 'User',
+      required: false,
+    },
+  ])
+  users_tag: User[];
+
   @Prop({
     type: {
       latitude: { type: Number },
@@ -58,6 +67,9 @@ export class Post extends AbstractDocument {
     latitude: number;
     longitude: number;
   };
+
+  @Prop({ type: Boolean, default: true })
+  public: boolean;
 
   @Prop({ type: Boolean, default: false })
   published: boolean;

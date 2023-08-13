@@ -37,8 +37,6 @@ export class PostsController {
     @Req() request: any,
     @UploadedFiles() files?: Express.Multer.File[],
   ) {
-    console.log(data);
-    console.log(request.user);
     return this.postsService.createPost(
       data,
       new Types.ObjectId(request.user._id),

@@ -42,15 +42,16 @@ export class PostsService {
             file.buffer,
             file.originalname,
           );
-          filesUploaded.push({ ...newFileUploaded, type: 'image' });
+          filesUploaded.push({
+            ...newFileUploaded,
+          });
         }),
       );
     }
 
-    for (let i = 0; i < data.users_tag.length; i++) {}
-
     return await this.postRepository.create({
       ...data,
+      user_tag: data.users_tag,
       user_id: user_id,
       media: [...filesUploaded],
       type: 'image',
@@ -73,6 +74,7 @@ export class PostsService {
         Body: dataBuffer,
         Key: generateAwsKey(filename),
         ACL: 'public-read',
+        ContentType: 'image/jpg',
       })
       .promise();
     return { key: uploadResult.Key, url: uploadResult.Location };
