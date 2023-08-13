@@ -24,10 +24,10 @@ export class PostsService {
     return this.postRepository.find({});
   }
 
-  /*  @InjectionHTTPExceptions(
+  @InjectionHTTPExceptions(
     PostErrors.INTERNAL_SERVER_ERROR,
     HttpStatus.INTERNAL_SERVER_ERROR,
-  ) */
+  )
   async createPost(
     data: CreatePostDto,
     user_id: Types.ObjectId,
@@ -42,7 +42,9 @@ export class PostsService {
             file.buffer,
             file.originalname,
           );
-          filesUploaded.push({ ...newFileUploaded, type: 'image' });
+          filesUploaded.push({
+            ...newFileUploaded,
+          });
         }),
       );
     }
@@ -72,6 +74,7 @@ export class PostsService {
         Body: dataBuffer,
         Key: generateAwsKey(filename),
         ACL: 'public-read',
+        ContentType: 'image/jpg',
       })
       .promise();
     return { key: uploadResult.Key, url: uploadResult.Location };

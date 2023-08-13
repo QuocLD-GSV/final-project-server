@@ -22,13 +22,7 @@ export class PostsRepository extends AbstractRepository<Post> {
     const skipAmount = (filterOption.pageNumber - 1) * filterOption.pageSize;
 
     return await this.model
-      .find(
-        {
-          filterQuery,
-        },
-        {},
-        { lean: true },
-      )
+      .find(filterQuery, {}, { lean: true })
       .skip(skipAmount)
       .limit(filterOption.pageSize)
       .populate({

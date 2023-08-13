@@ -8,6 +8,8 @@ import { FeedModule } from './feed.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(FeedModule);
+  app.enableCors({});
+
   const config = new DocumentBuilder()
     .setTitle('Feed API')
     .setDescription('The Authenticate API description')

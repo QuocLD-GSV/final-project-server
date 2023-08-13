@@ -54,7 +54,7 @@ export class Post extends AbstractDocument {
       required: false,
     },
   ])
-  user_tag: User[];
+  users_tag: User[];
 
   @Prop({
     type: {
