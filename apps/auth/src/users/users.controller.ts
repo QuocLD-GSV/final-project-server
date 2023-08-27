@@ -8,11 +8,16 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { ApiOperation, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiProperty,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { Types } from 'mongoose';
 import LocalJwtAuthGuard from '../guards/local-jwt-auth.guard';
 import { CreateUserRequest } from './dto/create-user.request';
 import { FollowUserDto } from './dto/follow-user.dto';
+import { GoogleAuthDto } from './dto/google-auth.request';
 import { UsersService } from './users.service';
 
 @Controller('auth/users')

@@ -12,6 +12,8 @@ import { InjectionHTTPExceptions } from '@app/common/decorators/try-catch';
 import { authErrors } from '../errors/auth.errors';
 import { User } from '@app/common/models/schemas/user.schema';
 import { UsersRepository } from '@app/common/repositories/users.repository';
+import { GoogleAuthDto } from './dto/google-auth.request';
+import { GOOGLE_LOGIN_ACTIONS } from '../constants/roles.enum';
 
 @Injectable()
 export class UsersService {

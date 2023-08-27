@@ -1,9 +1,10 @@
 import { User } from '@app/common/models/schemas/user.schema';
 import { Controller, Get, Ip, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { MessagePattern } from '@nestjs/microservices';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import {
   ApiBody,
   ApiOperation,
+  ApiProperty,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -12,6 +13,7 @@ import { CurrentUser } from './decorators/current-user.decorator';
 import JwtAuthGuard from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import LocalJwtAuthGuard from './guards/local-jwt-auth.guard';
+import { GoogleAuthDto } from './users/dto/google-auth.request';
 
 @Controller('auth')
 export class AuthController {
@@ -76,5 +78,21 @@ export class AuthController {
   async test(@Req() request: any) {
     console.log(request.cookies);
     return request.user;
+  }
+
+  @ApiProperty({
+    description: 'this api use for user from google register or login',
+  })
+  @Post('google-auth')
+  googleAuth(
+    @Payload() data: GoogleAuthDto,
+    @Res({ passthrough: true }) response: Response,
+    @Ip() ipAddress: any,
+    @Req() request: any,
+  ) {
+    return this.authService.googleAuth(data, response, {
+      ipAddress: ipAddress,
+      userAgent: request.userAgent,
+    });
   }
 }

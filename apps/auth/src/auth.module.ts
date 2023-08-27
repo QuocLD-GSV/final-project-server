@@ -9,6 +9,9 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { UsersModule } from './users/users.module';
 import { JwtLocalStrategy } from './strategies/local-jwt.strategy';
+import { UsersRepository } from '@app/common/repositories/users.repository';
+import { MongooseModule } from '@nestjs/mongoose';
+import { User, UserSchema } from '@app/common/models/schemas/user.schema';
 
 @Module({
   imports: [
@@ -34,6 +37,7 @@ import { JwtLocalStrategy } from './strategies/local-jwt.strategy';
 
       inject: [ConfigService],
     }),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [AuthController],
   providers: [
@@ -42,6 +46,7 @@ import { JwtLocalStrategy } from './strategies/local-jwt.strategy';
     JwtStrategy,
     ConfigService,
     JwtLocalStrategy,
+    UsersRepository,
   ],
 })
 export class AuthModule {}
