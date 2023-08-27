@@ -6,6 +6,12 @@ import { sign, verify, decode } from 'jsonwebtoken';
 import { UsersService } from './users/users.service';
 import { Types } from 'mongoose';
 import { User } from '@app/common/models/schemas/user.schema';
+import { GoogleAuthDto } from './users/dto/google-auth.request';
+import { GOOGLE_LOGIN_ACTIONS } from './constants/roles.enum';
+import { UsersRepository } from '@app/common/repositories/users.repository';
+import { generateRandomPassword } from './utils';
+import { InjectionHTTPExceptions } from '@app/common/decorators/try-catch';
+import { authErrors } from './errors/auth.errors';
 
 export interface TokenPayload {
   userId: string;
@@ -16,6 +22,7 @@ export class AuthService {
   constructor(
     private readonly configService: ConfigService,
     private readonly userService: UsersService,
+    private readonly usersRepository: UsersRepository,
   ) {}
 
   async login(
@@ -153,5 +160,44 @@ export class AuthService {
       refreshToken: refreshObject.sign(),
       roles: user.roles,
     };
+  }
+
+  @InjectionHTTPExceptions(authErrors.UNAUTHORIZED, HttpStatus.UNAUTHORIZED)
+  async googleAuth(
+    data: GoogleAuthDto,
+    response: Response,
+    values: { userAgent: string; ipAddress: string },
+  ) {
+    const isRegistedUser = await this.usersRepository.findOne({
+      email: data.email,
+    });
+
+    if (isRegistedUser) {
+      await this.login(isRegistedUser, response, values);
+      return {
+        ...isRegistedUser,
+        action: GOOGLE_LOGIN_ACTIONS.LOGIN,
+        authenticate: null,
+      };
+    } else {
+      const newUser = await this.userService.createUser({
+        email: data.email,
+        password: generateRandomPassword(10),
+        firstName: data.firstName,
+        lastName: data.lastName,
+        dateOfBirth: new Date(),
+        avatar: data.avatar,
+        googleId: data.googleId,
+        bio: 'string',
+      });
+
+      await this.login(newUser, response, values);
+
+      return {
+        ...newUser,
+        action: GOOGLE_LOGIN_ACTIONS.REGISTER,
+        authenticate: null,
+      };
+    }
   }
 }
