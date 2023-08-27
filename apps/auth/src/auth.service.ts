@@ -10,6 +10,8 @@ import { GoogleAuthDto } from './users/dto/google-auth.request';
 import { GOOGLE_LOGIN_ACTIONS } from './constants/roles.enum';
 import { UsersRepository } from '@app/common/repositories/users.repository';
 import { generateRandomPassword } from './utils';
+import { InjectionHTTPExceptions } from '@app/common/decorators/try-catch';
+import { authErrors } from './errors/auth.errors';
 
 export interface TokenPayload {
   userId: string;
@@ -160,6 +162,7 @@ export class AuthService {
     };
   }
 
+  @InjectionHTTPExceptions(authErrors.UNAUTHORIZED, HttpStatus.UNAUTHORIZED)
   async googleAuth(
     data: GoogleAuthDto,
     response: Response,
