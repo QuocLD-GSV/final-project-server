@@ -162,7 +162,6 @@ export class AuthService {
     };
   }
 
-  @InjectionHTTPExceptions(authErrors.UNAUTHORIZED, HttpStatus.UNAUTHORIZED)
   async googleAuth(
     data: GoogleAuthDto,
     response: Response,

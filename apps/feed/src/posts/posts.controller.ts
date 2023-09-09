@@ -12,8 +12,8 @@ export class PostsController {
 
   @ApiOperation({ description: 'return all post information' })
   @Get('get-post')
-  getPostById(@Payload() data: GetPostByIdDto) {
-    return this.postsService.getPostById(new Types.ObjectId(data.postId));
+  getPostById(@Query('postId') postId: string) {
+    return this.postsService.getPostById(new Types.ObjectId(postId));
   }
 
   @Get('all-post-likes')
