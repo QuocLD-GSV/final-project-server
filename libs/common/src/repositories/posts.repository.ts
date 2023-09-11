@@ -53,7 +53,7 @@ export class PostsRepository extends AbstractRepository<Post> {
       .populate({
         path: 'user_id',
         model: 'User',
-        select: ['_id', 'firstName', 'lastName'],
+        select: ['_id', 'firstName', 'lastName', 'avatar'],
       })
       .populate({
         path: 'comments',

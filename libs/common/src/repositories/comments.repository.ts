@@ -24,10 +24,29 @@ export class CommentsRepository extends AbstractRepository<Comment> {
   }
 
   async returnAllCommentOfPost(post_id: Types.ObjectId) {
-    return await this.model.find({ postId: post_id }).populate({
-      path: 'replies',
-      model: 'Comment',
-      select: ['author_id', 'content', 'like_id', 'createdAt'],
+    let commentsData = await this.model.find({ postId: post_id }).populate({
+      path: 'author_id',
+      model: 'User',
+      select: ['_id', 'firstName', 'lastName', 'avatar'],
     });
+
+    const transformedComments: Comment[] = commentsData.map((comment) => {
+      if (comment.replies && comment.replies.length > 0) {
+        const transformedReplies: Comment[] = comment.replies.map((replyId) => {
+          const replyIndex = commentsData.findIndex(
+            (c) => String(c._id) === String(replyId),
+          );
+          if (replyIndex !== -1) {
+            const reply = commentsData[replyIndex];
+            commentsData.splice(replyIndex, 1);
+            return reply;
+          }
+          return null;
+        });
+        comment.replies = transformedReplies;
+      }
+      return comment;
+    });
+    return transformedComments;
   }
 }
