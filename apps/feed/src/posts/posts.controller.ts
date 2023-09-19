@@ -27,7 +27,7 @@ export class PostsController {
   }
 
   @Get("profile-posts")
-  getUserPost(@Query('userd') userId: string){
+  getUserPost(@Query('userId') userId: string){
     return this.postsService.getProfileUserPost(new Types.ObjectId(String(userId)));
   }
 }
