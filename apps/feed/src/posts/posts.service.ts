@@ -37,4 +37,8 @@ export class PostsService {
     );
     return publicPost;
   }
+
+  async getProfileUserPost(userId: Types.ObjectId){
+    return await this.postsRepository.findAllProfilePost({user_id: userId});
+  }
 }

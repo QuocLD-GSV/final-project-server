@@ -64,4 +64,14 @@ export class PostsRepository extends AbstractRepository<Post> {
         model: 'Like',
       });
   }
+
+  async findAllProfilePost(filterQuery: FilterQuery<Post>){
+    return await this.model
+      .find(filterQuery, {}, { lean: true })
+      .populate({
+        path: 'user_id',
+        model: 'User',
+        select: ['_id', 'firstName', 'lastName', 'avatar'],
+      })
+  }
 }

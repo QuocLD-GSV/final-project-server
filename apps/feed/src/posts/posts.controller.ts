@@ -25,4 +25,9 @@ export class PostsController {
   getNewFeedForUser(@Query('page') page: number, @Query('size') size: number) {
     return this.postsService.getPublicPostsPaginate(page, size);
   }
+
+  @Get("profile-posts")
+  getUserPost(@Query('userId') userId: string){
+    return this.postsService.getProfileUserPost(new Types.ObjectId(String(userId)));
+  }
 }
