@@ -39,6 +39,6 @@ export class PostsService {
   }
 
   async getProfileUserPost(userId: Types.ObjectId){
-    return await this.postsRepository.find({user_id: userId});
+    return await this.postsRepository.findAllProfilePost({user_id: userId});
   }
 }
