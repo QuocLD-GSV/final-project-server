@@ -8,6 +8,11 @@ import { PostsModule } from './posts.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(PostsModule);
+  app.enableCors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    credentials: true,
+  });
 
   const config = new DocumentBuilder()
     .setTitle('Post API')
